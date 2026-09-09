@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* =========================================================
+   SKILLBRIDGE AI - PORTAL BACKGROUND
+   ========================================================= */
+
+.portal-background {
+  position: relative;
+  min-height: 100vh;
+  background-image: url("/assets/portal-background.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* Dark overlay for better text readability */
+.portal-background::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 8, 25, 0.35);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Keep the actual page content above the overlay */
+.portal-background > * {
+  position: relative;
+  z-index: 1;
+}
