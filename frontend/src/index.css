@@ -1,6 +1,116 @@
 @import "tailwindcss";
 
 /* =========================================================
+   SKILLBRIDGE AI - LIGHT THEME
+   =========================================================
+   The application originally used Slate's darkest shades as its
+   surfaces.  These overrides intentionally keep the existing Tailwind
+   component classes, while translating those dark surfaces, borders and
+   text colours into a single light visual system.
+*/
+
+:root {
+  --brand: #4f46e5;
+  --brand-strong: #4338ca;
+  --brand-soft: #eef2ff;
+  --surface: #ffffff;
+  --canvas: #f6f8fc;
+  --ink: #172033;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  color: var(--ink);
+  background: var(--canvas);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 0% 0%, rgb(224 231 255 / 0.5), transparent 28rem),
+    radial-gradient(circle at 100% 0%, rgb(236 253 245 / 0.42), transparent 25rem),
+    var(--canvas);
+  color: var(--ink);
+}
+
+/* Page surfaces and nested panels */
+[class*="bg-slate-950"] { background-color: #ffffff !important; }
+[class*="bg-slate-900"] { background-color: #ffffff !important; }
+[class*="bg-slate-850"] { background-color: #f8fafc !important; }
+[class*="bg-slate-800"] { background-color: #f1f5f9 !important; }
+[class*="bg-slate-700"] { background-color: #e2e8f0 !important; }
+[class*="bg-[#050816]"] { background-color: #f8fafc !important; }
+
+/* Preserve the soft, layered feel for translucent former-dark surfaces. */
+[class*="bg-slate-950/"] { background-color: rgb(255 255 255 / 0.82) !important; }
+[class*="bg-slate-900/"] { background-color: rgb(255 255 255 / 0.88) !important; }
+[class*="bg-slate-800/"] { background-color: rgb(241 245 249 / 0.9) !important; }
+[class*="bg-slate-700/"] { background-color: rgb(226 232 240 / 0.9) !important; }
+
+/* Former light-on-dark copy now has accessible contrast on white. */
+[class*="text-slate-100"],
+[class*="text-slate-200"],
+[class*="text-slate-300"] { color: #1e293b !important; }
+[class*="text-slate-400"] { color: #475569 !important; }
+[class*="text-slate-500"] { color: #64748b !important; }
+[class*="text-slate-600"] { color: #475569 !important; }
+[class~="text-white"] { color: #0f172a !important; }
+
+/* Accent text is intentionally deeper than Tailwind's default 300/400 shades
+   so status labels and links remain easy to read on the light canvas. */
+[class*="text-violet-"], [class*="text-indigo-"] { color: #5b36c8 !important; }
+[class*="text-emerald-"] { color: #087f5b !important; }
+[class*="text-amber-"] { color: #ae650b !important; }
+[class*="text-cyan-"] { color: #087a91 !important; }
+[class*="text-blue-"] { color: #2563c9 !important; }
+[class*="text-red-"] { color: #c2413d !important; }
+
+/* Soft brand-tinted panels distinguish content groups without visual noise. */
+[class*="bg-violet-500/"] { background-color: rgb(109 40 217 / 0.07) !important; }
+[class*="bg-indigo-500/"] { background-color: rgb(79 70 229 / 0.07) !important; }
+[class*="bg-emerald-500/"] { background-color: rgb(5 150 105 / 0.07) !important; }
+[class*="bg-amber-500/"] { background-color: rgb(217 119 6 / 0.08) !important; }
+[class*="bg-cyan-500/"] { background-color: rgb(8 145 178 / 0.07) !important; }
+[class*="bg-red-500/"] { background-color: rgb(220 38 38 / 0.06) !important; }
+[class*="border-violet-500/"] { border-color: rgb(109 40 217 / 0.2) !important; }
+[class*="border-indigo-500/"] { border-color: rgb(79 70 229 / 0.2) !important; }
+[class*="border-emerald-500/"] { border-color: rgb(5 150 105 / 0.2) !important; }
+[class*="border-amber-500/"] { border-color: rgb(217 119 6 / 0.22) !important; }
+[class*="border-cyan-500/"] { border-color: rgb(8 145 178 / 0.2) !important; }
+[class*="border-red-500/"] { border-color: rgb(220 38 38 / 0.18) !important; }
+
+/* Neutral, low-contrast borders work better with the light surfaces. */
+[class*="border-slate-900"],
+[class*="border-slate-800"],
+[class*="border-slate-700"] { border-color: #e2e8f0 !important; }
+[class*="border-slate-600"] { border-color: #cbd5e1 !important; }
+
+/* Replace dark gradient endpoints used in information cards. */
+[class*="from-violet-950"], [class*="from-indigo-950"] { --tw-gradient-from: #f5f3ff !important; }
+[class*="from-cyan-950"] { --tw-gradient-from: #ecfeff !important; }
+[class*="from-emerald-950"] { --tw-gradient-from: #ecfdf5 !important; }
+[class*="from-slate-900"], [class*="from-slate-800"] { --tw-gradient-from: #f8fafc !important; }
+[class*="to-slate-950"], [class*="to-slate-900"], [class*="to-slate-800"] { --tw-gradient-to: #ffffff !important; }
+
+/* Calls to action retain white labels on their coloured backgrounds. */
+[class*="bg-violet-6"][class~="text-white"],
+[class*="bg-indigo-6"][class~="text-white"],
+[class*="bg-emerald-6"][class~="text-white"],
+[class*="bg-amber-6"][class~="text-white"],
+[class*="bg-blue-6"][class~="text-white"],
+[class*="bg-gradient"][class~="text-white"] { color: #ffffff !important; }
+
+/* The public contact strip has a dark brand gradient, so its contents must
+   always stay white despite the global light-theme text treatment. */
+.public-contact-bar,
+.public-contact-bar a { color: #ffffff !important; }
+.public-contact-bar a:hover { color: rgb(255 255 255 / 0.8) !important; }
+
+/* Give all elevated panels a restrained, consistent light-theme depth. */
+[class*="rounded-2xl"][class*="border-slate-"],
+[class*="rounded-xl"][class*="border-slate-"] { box-shadow: 0 8px 24px rgb(15 23 42 / 0.035); }
+
+/* =========================================================
    SKILLBRIDGE AI - PORTAL BACKGROUND
    ========================================================= */
 
@@ -15,12 +125,12 @@
   overflow-x: hidden;
 }
 
-/* Dark overlay for better text readability */
+/* Light overlay keeps the photographic background subtle, not dark. */
 .portal-background::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(2, 8, 25, 0.35);
+  background: linear-gradient(135deg, rgb(248 250 252 / 0.88), rgb(238 242 255 / 0.78));
   pointer-events: none;
   z-index: 0;
 }

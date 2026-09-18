@@ -2,6 +2,18 @@
 node_modules/
 frontend/node_modules/
 
+# Environment Variables & Secrets
+.env
+*.env
+!.env.example
+backend/.env
+frontend/.env
+
+# Build outputs
+frontend/dist/
+dist/
+build/
+
 # Python Virtual Environments & caches
 venv/
 .venv/
@@ -18,3 +30,7 @@ backend/**/__pycache__/
 scratch/
 .DS_Store
 Thumbs.db
+
+# Large media files (>100MB exceeds GitHub push limit)
+SkillBridge_AI_Complete_Demo.mp4
+

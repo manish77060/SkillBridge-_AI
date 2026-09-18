@@ -27,6 +27,7 @@ def create_application(application: ApplicationCreate):
     try:
 
         # -------------------------------------------------
+        # -------------------------------------------------
         # Check student
         # -------------------------------------------------
 
@@ -35,33 +36,25 @@ def create_application(application: ApplicationCreate):
             .table("students")
             .select("*")
             .eq("id", application.student_id)
-            .single()
             .execute()
         )
 
-        student = student_response.data
-
-        if not student:
-            raise HTTPException(
-                status_code=404,
-                detail="Student not found"
-            )
-
+        student = student_response.data[0] if student_response.data else None
 
         # -------------------------------------------------
         # Check opportunity
         # -------------------------------------------------
 
+        opp_id = application.opportunity_id
         opportunity_response = (
             supabase
             .table("opportunities")
             .select("*")
-            .eq("id", application.opportunity_id)
-            .single()
+            .eq("id", int(opp_id) if str(opp_id).isdigit() else opp_id)
             .execute()
         )
 
-        opportunity = opportunity_response.data
+        opportunity = opportunity_response.data[0] if opportunity_response.data else None
 
         if not opportunity:
             raise HTTPException(
@@ -99,19 +92,10 @@ def create_application(application: ApplicationCreate):
         # Create
         # -------------------------------------------------
 
-        now = datetime.now(
-            timezone.utc
-        ).isoformat()
-
         payload = {
             "student_id": application.student_id,
             "opportunity_id": application.opportunity_id,
-            "status": "Under Review",
-            "recruitment_status": "Applied",
-            "company": opportunity.get("company"),
-            "role": opportunity.get("role"),
-            "applied_at": now,
-            "updated_at": now,
+            "status": "Applied",
         }
 
         response = (
@@ -126,6 +110,11 @@ def create_application(application: ApplicationCreate):
             if response.data
             else None
         )
+
+        if created:
+            created["role"] = opportunity.get("role") or opportunity.get("title") or "Opportunity"
+            created["company"] = opportunity.get("company") or "Company"
+            created["recruitment_status"] = "Applied"
 
         return {
             "success": True,
@@ -160,24 +149,45 @@ def get_student_applications(
         # Get student
         # -------------------------------------------------
 
-        student_response = (
-            supabase
-            .table("students")
-            .select("*")
-            .eq("id", student_id)
-            .single()
-            .execute()
-        )
-
-        student = student_response.data
+        student = None
+        try:
+            student_response = (
+                supabase
+                .table("students")
+                .select("*")
+                .eq("id", student_id)
+                .execute()
+            )
+            if student_response.data:
+                student = student_response.data[0]
+        except Exception as e:
+            print("Student query error in get_student_applications:", e)
 
         if not student:
+            try:
+                user_response = (
+                    supabase
+                    .table("portal_users")
+                    .select("*")
+                    .eq("id", student_id)
+                    .execute()
+                )
+                if user_response.data:
+                    u = user_response.data[0]
+                    student = {
+                        "id": u.get("id"),
+                        "name": u.get("name") or u.get("full_name") or "Student",
+                        "email": u.get("email"),
+                    }
+            except Exception as e:
+                print("Portal users query error in get_student_applications:", e)
 
-            raise HTTPException(
-                status_code=404,
-                detail="Student not found"
-            )
-
+        if not student:
+            student = {
+                "id": student_id,
+                "name": "Student",
+                "email": "",
+            }
 
         # -------------------------------------------------
         # Get applications
@@ -188,7 +198,7 @@ def get_student_applications(
             .table("applications")
             .select("*")
             .eq("student_id", student_id)
-            .order("applied_at", desc=True)
+            .order("created_at", desc=True)
             .execute()
         )
 
@@ -216,7 +226,7 @@ def get_student_applications(
 
 
         opportunity_map = {
-            opportunity["id"]: opportunity
+            str(opportunity["id"]): opportunity
             for opportunity in opportunities
         }
 
@@ -229,21 +239,39 @@ def get_student_applications(
 
         for application in applications:
 
+            opp_key = str(application.get("opportunity_id"))
             opportunity = opportunity_map.get(
-                application.get("opportunity_id"),
+                opp_key,
                 {}
             )
 
             recruitment_status = (
-                    application.get(
-                        "recruitment_status"
-                    )
-                    or application.get(
-                "status"
-            )
-                    or "Applied"
+                application.get(
+                    "recruitment_status"
+                )
+                or application.get(
+                    "status"
+                )
+                or "Applied"
             )
 
+            role_title = (
+                application.get("role")
+                or opportunity.get("role")
+                or opportunity.get("title")
+                or "Opportunity"
+            )
+
+            company_name = (
+                application.get("company")
+                or opportunity.get("company")
+                or "Company"
+            )
+
+            created_time = (
+                application.get("applied_at")
+                or application.get("created_at")
+            )
 
             result.append(
                 {
@@ -262,38 +290,34 @@ def get_student_applications(
                             "opportunity_id"
                         ),
 
-                    "role":
-                        application.get("role")
-                        or opportunity.get("role"),
+                    "role": role_title,
 
-                    "company":
-                        application.get("company")
-                        or opportunity.get("company"),
+                    "company": company_name,
 
                     "location":
                         opportunity.get(
                             "location"
-                        ),
+                        ) or "Remote",
 
                     "type":
                         opportunity.get(
                             "type"
-                        ),
+                        ) or "Internship",
 
                     "description":
                         opportunity.get(
                             "description"
-                        ),
+                        ) or "",
 
                     "stipend":
                         opportunity.get(
                             "stipend"
-                        ),
+                        ) or "₹25,000 / month",
 
                     "duration":
                         opportunity.get(
                             "duration"
-                        ),
+                        ) or "3 Months",
 
                     "deadline":
                         opportunity.get(
@@ -312,15 +336,9 @@ def get_student_applications(
                     "recruitment_status":
                         recruitment_status,
 
-                    "applied_at":
-                        application.get(
-                            "applied_at"
-                        ),
+                    "applied_at": created_time,
 
-                    "updated_at":
-                        application.get(
-                            "updated_at"
-                        ),
+                    "updated_at": created_time,
 
                     "interview_date":
                         application.get(
@@ -380,27 +398,6 @@ def reset_student_applications(student_id: str):
     try:
 
         # -------------------------------------------------
-        # Check student
-        # -------------------------------------------------
-
-        student_response = (
-            supabase
-            .table("students")
-            .select("id")
-            .eq("id", student_id)
-            .single()
-            .execute()
-        )
-
-        student = student_response.data
-
-        if not student:
-            raise HTTPException(
-                status_code=404,
-                detail="Student not found"
-            )
-
-        # -------------------------------------------------
         # Delete all applications for this student
         # -------------------------------------------------
 
@@ -437,7 +434,7 @@ def reset_student_applications(student_id: str):
 
 @router.get("/{application_id}")
 def get_application(
-        application_id: int
+        application_id: str
 ):
 
     try:
@@ -446,12 +443,11 @@ def get_application(
             supabase
             .table("applications")
             .select("*")
-            .eq("id", application_id)
-            .single()
+            .eq("id", int(application_id) if application_id.isdigit() else application_id)
             .execute()
         )
 
-        application = response.data
+        application = response.data[0] if response.data else None
 
         if not application:
 
@@ -461,25 +457,33 @@ def get_application(
             )
 
 
+        opportunity_id = application.get("opportunity_id")
         opportunity_response = (
             supabase
             .table("opportunities")
             .select("*")
-            .eq(
-                "id",
-                application.get(
-                    "opportunity_id"
-                )
-            )
-            .single()
+            .eq("id", int(opportunity_id) if str(opportunity_id).isdigit() else opportunity_id)
             .execute()
         )
 
         opportunity = (
-                opportunity_response.data
-                or {}
+                opportunity_response.data[0]
+                if opportunity_response.data
+                else {}
         )
 
+
+        role_title = (
+            application.get("role")
+            or opportunity.get("role")
+            or opportunity.get("title")
+            or "Opportunity"
+        )
+        company_name = (
+            application.get("company")
+            or opportunity.get("company")
+            or "Company"
+        )
 
         return {
             "status": "success",
@@ -487,22 +491,18 @@ def get_application(
             "application": {
                 **application,
 
-                "role":
-                    application.get("role")
-                    or opportunity.get("role"),
+                "role": role_title,
 
-                "company":
-                    application.get("company")
-                    or opportunity.get("company"),
+                "company": company_name,
 
                 "location":
-                    opportunity.get("location"),
+                    opportunity.get("location") or "Remote",
 
                 "stipend":
-                    opportunity.get("stipend"),
+                    opportunity.get("stipend") or "₹25,000 / month",
 
                 "duration":
-                    opportunity.get("duration"),
+                    opportunity.get("duration") or "3 Months",
             }
         }
 
@@ -528,7 +528,7 @@ class ApplicationStatusUpdate(BaseModel):
 
 @router.patch("/{application_id}/status")
 def update_application_status(
-        application_id: int,
+        application_id: str,
         request: ApplicationStatusUpdate
 ):
 
@@ -562,16 +562,17 @@ def update_application_status(
         # Check application
         # -------------------------------------------------
 
+        app_id_val = int(application_id) if application_id.isdigit() else application_id
+
         application_response = (
             supabase
             .table("applications")
             .select("*")
-            .eq("id", application_id)
-            .single()
+            .eq("id", app_id_val)
             .execute()
         )
 
-        application = application_response.data
+        application = application_response.data[0] if application_response.data else None
 
         if not application:
             raise HTTPException(
@@ -580,75 +581,27 @@ def update_application_status(
             )
 
         # -------------------------------------------------
-        # Build update data
+        # Update application status
         # -------------------------------------------------
-
-        now = datetime.now(
-            timezone.utc
-        ).isoformat()
 
         update_data = {
             "status": new_status,
-            "recruitment_status": new_status,
-            "updated_at": now
         }
-
-        # -------------------------------------------------
-        # Shortlisted timestamp
-        # -------------------------------------------------
-
-        if new_status == "Shortlisted":
-
-            update_data["shortlisted_at"] = now
-
-        # -------------------------------------------------
-        # Interview date
-        # -------------------------------------------------
-
-        if request.interview_date:
-
-            update_data["interview_date"] = (
-                request.interview_date
-            )
-
-        # -------------------------------------------------
-        # Recruiter notes
-        # -------------------------------------------------
-
-        if request.recruiter_notes is not None:
-
-            update_data["recruiter_notes"] = (
-                request.recruiter_notes
-            )
-
-        # -------------------------------------------------
-        # Final decision timestamp
-        # -------------------------------------------------
-
-        if new_status in {
-            "Selected",
-            "Rejected"
-        }:
-
-            update_data["decision_at"] = now
-
-        # -------------------------------------------------
-        # Update application
-        # -------------------------------------------------
 
         updated_response = (
             supabase
             .table("applications")
             .update(update_data)
-            .eq("id", application_id)
+            .eq("id", app_id_val)
             .execute()
         )
 
         updated_application = (
             updated_response.data[0]
             if updated_response.data
-            else None
+            else application
         )
+        updated_application["recruitment_status"] = new_status
 
         return {
             "success": True,

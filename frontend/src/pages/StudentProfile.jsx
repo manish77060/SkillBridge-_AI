@@ -533,7 +533,7 @@ function StudentProfile({
     },
     {
       q: "How do Round 1 and Round 2 of the skill assessment work?",
-      a: "Round 1 consists of 25 timed MCQ questions with negative marking (+1 for correct answers, -0.25 for incorrect answers). Scoring 60% or higher qualifies you for Round 2, which is a 60-minute practical live coding challenge with automated test suites.",
+      a: "Round 1 consists of 25 timed MCQ questions with negative marking (+1 for correct answers, -0.25 for incorrect answers). Scoring 60% or higher qualifies you for Round 2, which is a 30-minute practical live coding challenge with automated test suites.",
     },
     {
       q: "How does the Supabase database connection work?",

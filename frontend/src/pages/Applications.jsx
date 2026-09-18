@@ -16,6 +16,19 @@ import {
 const API_BASE = "http://127.0.0.1:8000";
 const STUDENT_ID = "e0bab151-ab49-42fe-b6f1-c4346834b1f1";
 
+function getEffectiveStudentId(currentUser) {
+  if (currentUser?.id) return currentUser.id;
+  try {
+    const session = JSON.parse(localStorage.getItem("skillbridge_auth_session") || "{}");
+    if (session?.user?.id) return session.user.id;
+  } catch {}
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user?.id) return user.id;
+  } catch {}
+  return STUDENT_ID;
+}
+
 // =========================================================
 // DATE HELPERS
 // =========================================================
@@ -187,7 +200,9 @@ function normalizeApplication(item) {
 // COMPONENT
 // =========================================================
 
-function Applications() {
+function Applications({ currentUser } = {}) {
+  const effectiveStudentId = getEffectiveStudentId(currentUser);
+
   const [applications, setApplications] = useState([]);
 
   const [loading, setLoading] = useState(true);
@@ -213,23 +228,35 @@ function Applications() {
       setError("");
 
       const response = await fetch(
-        `${API_BASE}/api/applications/student/${STUDENT_ID}`
+        `${API_BASE}/api/applications/student/${effectiveStudentId}`
       );
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to load applications (${response.status})`
-        );
+        let msg = `Failed to load applications (${response.status})`;
+        try {
+          const errData = await response.json();
+          if (errData?.detail) msg = errData.detail;
+        } catch {}
+        throw new Error(msg);
       }
 
       const data = await response.json();
 
       const list = Array.isArray(data?.applications)
         ? data.applications
+        : Array.isArray(data?.data)
+        ? data.data
+        : Array.isArray(data)
+        ? data
         : [];
 
       const normalizedApplications =
-        list.map(normalizeApplication);
+        list.map((item) =>
+          normalizeApplication({
+            ...item,
+            student_id: item?.student_id || effectiveStudentId,
+          })
+        );
 
       setApplications(normalizedApplications);
     } catch (err) {
@@ -253,7 +280,7 @@ function Applications() {
 
   useEffect(() => {
     fetchApplications();
-  }, []);
+  }, [effectiveStudentId]);
 
   // =========================================================
   // FILTERED APPLICATIONS

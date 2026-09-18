@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,6 +19,7 @@ from app.routers import assessment
 from app.routers import skill_gap
 from app.routers import opportunity_matching
 from app.routers import resume
+from app.routers import admin          # Super Admin & User Auth
 
 
 # =========================================================
@@ -38,13 +41,19 @@ app = FastAPI(
 # CORS CONFIGURATION
 # =========================================================
 
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:5173,http://127.0.0.1:5173",
+    ).split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
 
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=allowed_origins,
 
     allow_credentials=True,
 
@@ -194,6 +203,15 @@ app.include_router(
 
 app.include_router(
     resume.router
+)
+
+
+# ---------------------------------------------------------
+# SUPER ADMIN & USER AUTH APIs
+# ---------------------------------------------------------
+
+app.include_router(
+    admin.router
 )
 
 

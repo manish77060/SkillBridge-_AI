@@ -17,6 +17,7 @@ const MODULES = [
     "title": "Python Backend Foundations",
     "target": 80,
     "source": "https://docs.python.org/3/tutorial/",
+    "introVideo": "/videos/python-intro.mp4",
     "slides": [
       {
         "id": "python-1",
@@ -258,6 +259,7 @@ const MODULES = [
     "title": "FastAPI API Foundations",
     "target": 80,
     "source": "https://fastapi.tiangolo.com/tutorial/",
+    "introVideo": "/videos/fastapi-intro.mp4",
     "slides": [
       {
         "id": "fastapi-1",
@@ -499,6 +501,7 @@ const MODULES = [
     "title": "SQL for Backend Developers",
     "target": 70,
     "source": "https://www.postgresql.org/docs/current/tutorial-sql.html",
+    "introVideo": "/videos/sql-intro.mp4",
     "slides": [
       {
         "id": "sql-1",
@@ -740,6 +743,7 @@ const MODULES = [
     "title": "React Frontend Foundations",
     "target": 60,
     "source": "https://react.dev/learn",
+    "introVideo": "/videos/react-intro.mp4",
     "slides": [
       {
         "id": "react-1",
@@ -1843,6 +1847,21 @@ export default function LearningCenter({ currentUser, setActivePage }) {
               <h3 className="mt-3 text-xl font-bold text-white">{module.title}</h3>
               <p className="mt-2 text-sm text-slate-400">{count}/4 quizzes submitted · {proficiency[module.skill] == null ? "Skill proficiency unavailable" : `Current proficiency: ${proficiency[module.skill]}%`}</p>
               <ProgressBar value={count / 4 * 100} label={`${module.skill} module progress`} />
+              {module.introVideo && (
+                <div className="mt-5">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-cyan-400 mb-3">📹 Introduction Video</p>
+                  <video
+                    className="w-full rounded-xl border border-slate-700/60"
+                    src={module.introVideo}
+                    controls
+                    controlsList="nodownload"
+                    preload="metadata"
+                    playsInline
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              )}
               <ul className="mt-5 space-y-2">{module.slides.map((slide, slideIndex) => <li key={slide.id} className="flex gap-2 text-sm text-slate-400"><span className={quizCompleted(record, slide) ? "text-emerald-400" : "text-slate-500"}>{quizCompleted(record, slide) ? "✓" : `${slideIndex + 1}.`}</span>{slide.title}</li>)}</ul>
               <button type="button" className={`${button} mt-6 w-full`} disabled={!available} onClick={() => openSlide(next)}>{done ? "Review module" : !available ? "Pass the previous module" : count === 4 ? "Review results and retry" : count ? "Continue module" : "Start module"}</button>
               <ModuleResults record={record} module={module} />

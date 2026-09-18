@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillBridge AI — Pitch Deck | Team Apex (Dehradun Hackathon)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            heading: ['"Space Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @page {
+      size: 16 9 landscape;
+      margin: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      box-sizing: border-box;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3rem 4rem;
+      background: #FFFFFF;
+      position: relative;
+    }
+    .slide.active {
+      display: flex;
+    }
+    .card-light {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+      transition: all 0.2s ease-in-out;
+    }
+    .card-light:hover {
+      border-color: #CBD5E1;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.08);
+    }
+    
+    /* Flowchart styles */
+    .flow-step {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      position: relative;
+    }
+    .flow-arrow {
+      color: #64748B;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    /* Print styles for saving PDF */
+    @media print {
+      body {
+        background: #FFFFFF !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .slide {
+        display: flex !important;
+        page-break-after: always;
+        break-after: page;
+        width: 100vw !important;
+        height: 100vh !important;
+        padding: 2.5rem 3rem !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-900 select-none">
+
+  <!-- TOP NAVIGATION BAR (NO PRINT) -->
+  <div class="no-print fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-sm">
+    <div class="flex items-center space-x-3">
+      <span class="bg-indigo-600 text-white font-black text-xs px-2.5 py-1 rounded-md tracking-wider">TEAM APEX</span>
+      <span class="font-bold text-slate-800 text-sm tracking-tight">SkillBridge AI — Dehradun Hackathon Round 1 Pitch Deck</span>
+    </div>
+    
+    <div class="flex items-center space-x-4">
+      <span id="slide-indicator" class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+        Slide 1 / 11
+      </span>
+      <button onclick="prevSlide()" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button onclick="nextSlide()" class="p-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <button onclick="toggleFullScreen()" class="hidden md:flex items-center space-x-1 text-xs font-semibold bg-slate-800 text-white px-3 py-1.5 rounded-lg hover:bg-slate-900 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+        <span>Fullscreen</span>
+      </button>
+      <button onclick="window.print()" class="flex items-center space-x-1 text-xs font-semibold bg-emerald-600 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-700 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        <span>Save as PDF</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- SLIDES CONTAINER -->
+  <div class="pt-12">
+
+    <!-- SLIDE 1: TITLE SLIDE -->
+    <div class="slide active justify-between bg-gradient-to-br from-slate-50 via-white to-indigo-50/40">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-md">
+            S
+          </div>
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 block">Dehradun Hackathon 2026</span>
+            <span class="text-sm font-bold text-slate-700">Track: AI & Higher Education Solutions</span>
+          </div>
+        </div>
+        <div class="bg-indigo-50 border border-indigo-200 px-4 py-1.5 rounded-full flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-extrabold text-indigo-900 tracking-wide">TEAM APEX</span>
+        </div>
+      </div>
+
+      <div class="my-auto py-8">
+        <div class="inline-flex items-center space-x-2 bg-indigo-100/80 border border-indigo-200 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full mb-6">
+          <span>🚀 Round 1 Pitch Deck</span>
+          <span>•</span>
+          <span>Uttarakhand Higher Education & Placement Engine</span>
+        </div>
+        <h1 class="text-6xl font-extrabold text-slate-900 tracking-tight font-heading leading-none mb-6">
+          SkillBridge <span class="text-indigo-600">AI</span>
+        </h1>
+        <p class="text-2xl font-medium text-slate-600 max-w-4xl leading-relaxed mb-8">
+          The academia–industry collaboration portal: one AI-driven platform that unifies skill mapping, verified internships, and placement for <span class="text-indigo-700 font-bold">Students</span>, <span class="text-emerald-700 font-bold">Recruiters</span>, and <span class="text-amber-700 font-bold">Institutions</span> — in a single shared pipeline.
+        </p>
+
+        <!-- Highlight badges -->
+        <div class="grid grid-cols-3 gap-6 max-w-4xl">
+          <div class="card-light p-4 flex items-center space-x-4 border-l-4 border-indigo-500">
+            <div class="w-12 h-12 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl">🎓</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Student Workspace</h4>
+              <p class="text-xs text-slate-500">AI Readiness Gauge & Learning Path</p>
+            </div>
+          </div>
+          <div class="card-light p-4 flex items-center space-x-4 border-l-4 border-emerald-500">
+            <div class="w-12 h-12 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl">💼</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Industry & Hiring Suite</h4>
+              <p class="text-xs text-slate-500">AI Talent Search & 2-Round Screen</p>
+            </div>
+          </div>
+          <div class="card-light p-4 flex items-center space-x-4 border-l-4 border-amber-500">
+            <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xl">🏛️</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Institution Hub</h4>
+              <p class="text-xs text-slate-500">Placement Cell Analytics & Gap Map</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-500 border-t border-slate-200 pt-4">
+        <span>Team Apex • Dehradun, Uttarakhand</span>
+        <span>Built for Scalable State & National Placement Impact</span>
+        <span>01 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: PROBLEM STATEMENT -->
+    <div class="slide justify-between bg-white">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">PROBLEM STATEMENT</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-3">
+          The Academia–Industry Disconnect in Campus Hiring
+        </h2>
+        <p class="text-slate-600 font-medium text-base mb-8 max-w-3xl">
+          Higher education institutions in Uttarakhand and across India face massive structural friction connecting student skills with industry demand.
+        </p>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div class="card-light p-6 border-l-4 border-indigo-500">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-bold">1</div>
+              <h3 class="text-lg font-bold text-slate-800">No Shared Skill-Mapping Standard</h3>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Academia measures capability via marks and course credits; industry measures it via role-fit and practical code readiness. With no standardized skill map, both sides operate blindly.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-l-4 border-emerald-500">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold">2</div>
+              <h3 class="text-lg font-bold text-slate-800">Internships Sourced by Cold Outreach</h3>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Placement cells (TPOs) and students chase internships manually company-by-company, while recruiters struggle to discover verified student talent from regional colleges outside metro cities.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-l-4 border-amber-500">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-lg font-bold">3</div>
+              <h3 class="text-lg font-bold text-slate-800">Placement is Tracked, Not Managed</h3>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Institutions log placement outcomes after the fact in static spreadsheets, with zero live analytics connecting student learning activity to recruiter decisions.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-l-4 border-rose-500">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-lg font-bold">4</div>
+              <h3 class="text-lg font-bold text-slate-800">No Unified Tri-Party Portal</h3>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Students use job boards, recruiters use bloated ATS tools, and colleges use spreadsheets — creating fragmented silos that cause talent wastage and long hiring cycles.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-100 pt-3">
+        <span>Addressing Tier-2/3 Institution Bottlenecks in Uttarakhand & India</span>
+        <span>02 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: PROPOSED SOLUTION & FLOWCHART -->
+    <div class="slide justify-between bg-slate-50/50">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">PROPOSED SOLUTION & ECOSYSTEM FLOW</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-2">
+          One Unified Ecosystem: Academia & Industry, One Pipeline
+        </h2>
+        <p class="text-slate-600 text-sm mb-6">
+          SkillBridge AI replaces disconnected tools with a real-time, tri-sided platform powered by a shared skill graph.
+        </p>
+
+        <!-- FLOWCHART DIAGRAM 1 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-6">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center space-x-2">
+            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Unified Data Flow Architecture</span>
+          </div>
+
+          <div class="grid grid-cols-5 gap-3 items-center text-center">
+            <!-- Flow Box 1 -->
+            <div class="flow-step border-indigo-200 bg-indigo-50/40">
+              <span class="text-2xl block mb-1">🎓</span>
+              <h4 class="font-bold text-slate-800 text-xs">Student Profile</h4>
+              <p class="text-[10px] text-slate-500 mt-1">Resume & Skill Vector</p>
+            </div>
+
+            <div class="flow-arrow text-indigo-400 font-bold text-center">➔</div>
+
+            <!-- Flow Box 2 -->
+            <div class="flow-step border-emerald-300 bg-emerald-50/60 shadow-md transform scale-105">
+              <span class="text-2xl block mb-1">⚡</span>
+              <h4 class="font-bold text-emerald-900 text-xs">SkillBridge AI Engine</h4>
+              <p class="text-[10px] text-emerald-700 font-semibold mt-1">Skill Gap & Assessment</p>
+            </div>
+
+            <div class="flow-arrow text-indigo-400 font-bold text-center">➔</div>
+
+            <!-- Flow Box 3 -->
+            <div class="grid grid-rows-2 gap-2">
+              <div class="flow-step border-emerald-200 bg-emerald-50/30 text-left py-2 px-3">
+                <div class="font-bold text-slate-800 text-[11px] flex items-center justify-between">
+                  <span>💼 Recruiter Suite</span>
+                  <span class="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">Ranked Talent</span>
+                </div>
+              </div>
+              <div class="flow-step border-amber-200 bg-amber-50/30 text-left py-2 px-3">
+                <div class="font-bold text-slate-800 text-[11px] flex items-center justify-between">
+                  <span>🏛️ Institution Hub</span>
+                  <span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-bold">Curriculum Insights</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Pillars Grid -->
+        <div class="grid grid-cols-3 gap-6">
+          <div class="card-light p-5 border-t-4 border-indigo-500">
+            <h3 class="font-bold text-slate-800 text-base mb-2">Student Workspace</h3>
+            <ul class="text-xs text-slate-600 space-y-1.5 font-medium">
+              <li class="flex items-center">✦ AI Readiness Score & Skill Gap Gauge</li>
+              <li class="flex items-center">✦ Real-Time Opportunity Match %</li>
+              <li class="flex items-center">✦ Integrated Learning Center & Certificates</li>
+            </ul>
+          </div>
+          <div class="card-light p-5 border-t-4 border-emerald-500">
+            <h3 class="font-bold text-slate-800 text-base mb-2">Industry & Hiring Suite</h3>
+            <ul class="text-xs text-slate-600 space-y-1.5 font-medium">
+              <li class="flex items-center">✦ 5-Stage Kanban Hiring Pipeline</li>
+              <li class="flex items-center">✦ Automated 2-Round Screening (MCQ + Code)</li>
+              <li class="flex items-center">✦ AI Verified Talent Match Search</li>
+            </ul>
+          </div>
+          <div class="card-light p-5 border-t-4 border-amber-500">
+            <h3 class="font-bold text-slate-800 text-base mb-2">Institution Hub</h3>
+            <ul class="text-xs text-slate-600 space-y-1.5 font-medium">
+              <li class="flex items-center">✦ Live Department Placement Analytics</li>
+              <li class="flex items-center">✦ Student Readiness Dossiers</li>
+              <li class="flex items-center">✦ Market Demand Curriculum Recommendations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-200 pt-3">
+        <span>Instant Portal Switching • Real-time Backend Sync • One Shared Skill Graph</span>
+        <span>03 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: INNOVATION & UNIQUENESS -->
+    <div class="slide justify-between bg-white">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-violet-600 bg-violet-50 px-3 py-1 rounded-full border border-violet-100">INNOVATION & UNIQUENESS</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-3">
+          Why SkillBridge Beats Generic Job Boards & LMSs
+        </h2>
+        <p class="text-slate-600 text-sm mb-8">
+          Traditional job portals show raw resumes; traditional LMSs stop at course video completion. SkillBridge connects both into a closed-loop hiring engine.
+        </p>
+
+        <div class="grid grid-cols-3 gap-6">
+          <div class="card-light p-6 border-t-4 border-indigo-600">
+            <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold mb-3">01</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">One Skill Graph, 3 Lenses</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              The same verified skill dataset powers student readiness, recruiter search rankings, and institute curriculum insights — no data duplicate entry.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-t-4 border-emerald-600">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-3">02</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">AI Reads the Gap, Not Just Resume</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Compares candidate skills directly against job requirements to output a personalized, time-boxed action plan to achieve 100% readiness.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-t-4 border-amber-600">
+            <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold mb-3">03</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">Built-in 2-Round Assessment Engine</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Timed MCQ screening with negative marking gating an automated live coding challenge — recruiters receive pre-evaluated candidates.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-t-4 border-violet-600">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 text-violet-700 flex items-center justify-center font-bold mb-3">04</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">Closed-Loop Feedback System</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Institutions get real-time feedback on which technical skills cause candidate rejection, turning hiring data into curriculum upgrades.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-t-4 border-blue-600">
+            <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold mb-3">05</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">Learning Tied to Verified Outcomes</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Completing targeted micro-courses instantly updates candidate readiness scores and notifies recruiters watching that skill matrix.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-t-4 border-rose-600">
+            <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-bold mb-3">06</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">Recruiter-Grade Match Score</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Students see exact transparent AI match percentages for roles (e.g. 94% fit), identical to the score ranking shown to recruiters.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-100 pt-3">
+        <span>Competitive Edge: Complete Integration across Student, Industry, and Institute</span>
+        <span>04 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: TARGET USERS -->
+    <div class="slide justify-between bg-slate-50/40">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">TARGET USERS & STAKEHOLDERS</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-2">
+          Built for the 3 Stakeholders Every Placement Depends On
+        </h2>
+        <p class="text-slate-600 text-sm mb-8">
+          Addressing specific pain points for students, hiring companies, and university placement officers in regional tech hubs.
+        </p>
+
+        <div class="grid grid-cols-3 gap-8">
+          <!-- User Group 1 -->
+          <div class="card-light p-6 border-t-4 border-indigo-500 bg-white">
+            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl mb-4">
+              👨‍🎓
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Students & Job Seekers</h3>
+            <p class="text-xs font-medium text-indigo-600 mb-4">Engineering, CS & Technical Graduates</p>
+
+            <div class="space-y-3 text-xs text-slate-600 border-t border-slate-100 pt-4">
+              <div class="flex items-start space-x-2">
+                <span class="text-indigo-600 font-bold">•</span>
+                <span><strong>Pain Point:</strong> Unsure which technical skills employers actually demand.</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="text-indigo-600 font-bold">•</span>
+                <span><strong>Solution:</strong> Live Skill Matrix, AI readiness score, and targeted micro-learning paths.</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="text-indigo-600 font-bold">•</span>
+                <span><strong>Value:</strong> Direct path to verified internships without cold emails.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Group 2 -->
+          <div class="card-light p-6 border-t-4 border-emerald-500 bg-white">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl mb-4">
+              💼
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Recruiters & Hiring Managers</h3>
+            <p class="text-xs font-medium text-emerald-600 mb-4">Startups, Tech Firms & Enterprises</p>
+
+            <div class="space-y-3 text-xs text-slate-600 border-t border-slate-100 pt-4">
+              <div class="flex items-start space-x-2">
+                <span class="text-emerald-600 font-bold">•</span>
+                <span><strong>Pain Point:</strong> Sifting through hundreds of unverified resume PDFs.</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="text-emerald-600 font-bold">•</span>
+                <span><strong>Solution:</strong> AI talent ranking + automated 2-round assessment engine.</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="text-emerald-600 font-bold">•</span>
+                <span><strong>Value:</strong> 70% reduction in time-to-hire with verified code candidates.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Group 3 -->
+          <div class="card-light p-6 border-t-4 border-amber-500 bg-white">
+            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl mb-4">
+              🏛️
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Institutions & TPO Cells</h3>
+            <p class="text-xs font-medium text-amber-600 mb-4">Colleges, Universities & Institutes</p>
+
+            <div class="space-y-3 text-xs text-slate-600 border-t border-slate-100 pt-4">
+              <div class="flex items-start space-x-2">
+                <span class="text-amber-600 font-bold">•</span>
+                <span><strong>Pain Point:</strong> Spreadsheet tracking and manual outreach to recruiters.</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="text-amber-600 font-bold">•</span>
+                <span><strong>Solution:</strong> Placement analytics dashboard & curriculum gap insights.</span>
+              </div>
+              <div class="flex items-start space-x-2">
+                <span class="text-amber-600 font-bold">•</span>
+                <span><strong>Value:</strong> Higher placement rates & industry-aligned course planning.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-200 pt-3">
+        <span>Tailored for Educational Hubs like Dehradun & Uttarakhand Technical Institutes</span>
+        <span>05 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: TECHNICAL ARCHITECTURE & FLOWCHART -->
+    <div class="slide justify-between bg-white">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">TECHNICAL ARCHITECTURE</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-2">
+          Real-Time, AI-Native Technical Architecture
+        </h2>
+        <p class="text-slate-600 text-sm mb-6">
+          A production-ready stack designed for high throughput, low-latency scoring, and instant multi-portal synchronization.
+        </p>
+
+        <!-- ARCHITECTURE FLOWCHART DIAGRAM -->
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-6">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center justify-between">
+            <span>System Data Processing Pipeline</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-mono">React 19 + FastAPI + Supabase</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-4 text-center">
+            <div class="flow-step border-indigo-300">
+              <span class="text-xs font-bold uppercase text-indigo-600 block mb-1">Frontend Layer</span>
+              <h5 class="font-extrabold text-slate-800 text-sm">React 19 / Vite</h5>
+              <p class="text-[10px] text-slate-500 mt-1">Single Session Multi-Portal Switching & Tailwind UI</p>
+            </div>
+
+            <div class="flow-step border-emerald-300">
+              <span class="text-xs font-bold uppercase text-emerald-600 block mb-1">API & AI Service</span>
+              <h5 class="font-extrabold text-slate-800 text-sm">FastAPI + Skill AI</h5>
+              <p class="text-[10px] text-slate-500 mt-1">Skill Extraction, Match Scoring & Gap Analysis</p>
+            </div>
+
+            <div class="flow-step border-amber-300">
+              <span class="text-xs font-bold uppercase text-amber-600 block mb-1">Data & Realtime</span>
+              <h5 class="font-extrabold text-slate-800 text-sm">Supabase / Postgres</h5>
+              <p class="text-[10px] text-slate-500 mt-1">Row-Level Security, Auth & Realtime Subscriptions</p>
+            </div>
+
+            <div class="flow-step border-purple-300">
+              <span class="text-xs font-bold uppercase text-purple-600 block mb-1">Assessment Engine</span>
+              <h5 class="font-extrabold text-slate-800 text-sm">2-Round Gated Suite</h5>
+              <p class="text-[10px] text-slate-500 mt-1">Timed MCQ Cutoff + Code Evaluator</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4">
+          <div class="card-light p-4">
+            <h4 class="font-bold text-slate-800 text-xs mb-1">Experience Layer</h4>
+            <p class="text-[11px] text-slate-600">Responsive SPA with instant role switching between Student, Industry, and Institution views.</p>
+          </div>
+          <div class="card-light p-4">
+            <h4 class="font-bold text-slate-800 text-xs mb-1">AI / Matching Engine</h4>
+            <p class="text-[11px] text-slate-600">Resume skill extraction, role-specific gap scoring, and natural language career recommendations.</p>
+          </div>
+          <div class="card-light p-4">
+            <h4 class="font-bold text-slate-800 text-xs mb-1">Realtime Storage</h4>
+            <p class="text-[11px] text-slate-600">Single source of truth via Supabase Postgres — applications and status sync instantly across portals.</p>
+          </div>
+          <div class="card-light p-4">
+            <h4 class="font-bold text-slate-800 text-xs mb-1">Assessment Engine</h4>
+            <p class="text-[11px] text-slate-600">Automated timed test execution with negative marking cutoff gating candidate code submissions.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-100 pt-3">
+        <span>Full-Stack Prototype Live & Tested</span>
+        <span>06 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: FEASIBILITY & WORKING DEMO -->
+    <div class="slide justify-between bg-slate-50/50">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">FEASIBILITY & LIVE WORKING PRODUCT</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-2">
+          Not Just a Concept — A Working Live Product
+        </h2>
+        <p class="text-slate-600 text-sm mb-6">
+          SkillBridge AI is fully functional with a backend database, live assessment engine, and multi-portal workflow ready for live demo.
+        </p>
+
+        <div class="grid grid-cols-12 gap-6 items-center">
+          <!-- Mockup / Live UI visual representation -->
+          <div class="col-span-7 card-light p-4 bg-white border border-slate-300 shadow-lg">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-rose-400"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                <span class="text-xs font-mono text-slate-500 ml-2">SkillBridge Student Dashboard</span>
+              </div>
+              <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">● Supabase Connected</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 mb-3">
+              <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100">
+                <span class="text-[10px] text-slate-500 uppercase font-bold block">Readiness Score</span>
+                <span class="text-2xl font-black text-indigo-600">78 <span class="text-xs text-slate-400 font-normal">/100</span></span>
+              </div>
+              <div class="bg-emerald-50/70 p-3 rounded-xl border border-emerald-100">
+                <span class="text-[10px] text-slate-500 uppercase font-bold block">Verified Skills</span>
+                <span class="text-2xl font-black text-emerald-600">12 <span class="text-xs text-emerald-700 font-normal">+3 this mo</span></span>
+              </div>
+              <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-100">
+                <span class="text-[10px] text-slate-500 uppercase font-bold block">AI Matches</span>
+                <span class="text-2xl font-black text-amber-600">24 <span class="text-xs text-slate-400 font-normal">Roles</span></span>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 text-slate-200 p-3 rounded-xl text-xs font-mono">
+              <div class="text-emerald-400 font-bold mb-1">⚡ AI Skill Insight Generator</div>
+              <p class="text-[11px] text-slate-300">"Your Java and SQL baseline is strong. Adding Spring Boot and Docker will increase your readiness score for Backend Intern roles by +16%."</p>
+            </div>
+          </div>
+
+          <!-- Feature Checklist -->
+          <div class="col-span-5 space-y-4">
+            <div class="card-light p-4 bg-white flex items-start space-x-3 border-l-4 border-emerald-500">
+              <svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">3 Portals Live Today</h4>
+                <p class="text-xs text-slate-500">Seamless switching across Student Workspace, Industry Suite, and Institute Hub.</p>
+              </div>
+            </div>
+
+            <div class="card-light p-4 bg-white flex items-start space-x-3 border-l-4 border-emerald-500">
+              <svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Real Backend Synchronization</h4>
+                <p class="text-xs text-slate-500">Supabase Auth + Postgres + Realtime subscriptions — live data, not static mockups.</p>
+              </div>
+            </div>
+
+            <div class="card-light p-4 bg-white flex items-start space-x-3 border-l-4 border-emerald-500">
+              <svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Gated 2-Round Assessment Engine</h4>
+                <p class="text-xs text-slate-500">Round 1 MCQ cutoff unlocks Round 2 multi-language coding evaluations automatically.</p>
+              </div>
+            </div>
+
+            <div class="card-light p-4 bg-white flex items-start space-x-3 border-l-4 border-emerald-500">
+              <svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Demo Mode Credentials Ready</h4>
+                <p class="text-xs text-slate-500">Pre-configured accounts for hackathon judges to test every role live in Round 2.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-200 pt-3">
+        <span>Functional Prototype • Ready for Live Demonstration in Round 2</span>
+        <span>07 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: EXPECTED IMPACT & METRICS -->
+    <div class="slide justify-between bg-white">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">EXPECTED IMPACT & METRICS</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-3">
+          Quantifiable Impact Across Every Placement Dimension
+        </h2>
+        <p class="text-slate-600 text-sm mb-8">
+          Eliminating placement inefficiencies with measurable speed, accuracy, and engagement gains.
+        </p>
+
+        <!-- Big Stat Callouts -->
+        <div class="grid grid-cols-4 gap-6 mb-8">
+          <div class="card-light p-6 text-center border-t-4 border-indigo-600 bg-indigo-50/30">
+            <span class="text-5xl font-black text-indigo-600 block mb-1">94%</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-700 block mb-1">Match Precision</span>
+            <p class="text-[11px] text-slate-500">AI job-role compatibility accuracy for candidates.</p>
+          </div>
+
+          <div class="card-light p-6 text-center border-t-4 border-emerald-600 bg-emerald-50/30">
+            <span class="text-5xl font-black text-emerald-600 block mb-1">60%</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-700 block mb-1">Screening Cutoff</span>
+            <p class="text-[11px] text-slate-500">Automated pre-filtering before recruiter manual interview.</p>
+          </div>
+
+          <div class="card-light p-6 text-center border-t-4 border-amber-600 bg-amber-50/30">
+            <span class="text-5xl font-black text-amber-600 block mb-1">3</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-700 block mb-1">Unified Portals</span>
+            <p class="text-[11px] text-slate-500">Student, Recruiter, and Institution aligned on one graph.</p>
+          </div>
+
+          <div class="card-light p-6 text-center border-t-4 border-violet-600 bg-violet-50/30">
+            <span class="text-5xl font-black text-violet-600 block mb-1">100%</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-700 block mb-1">Real-Time Sync</span>
+            <p class="text-[11px] text-slate-500">Instant updates on readiness scores and hiring status.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6">
+          <div class="card-light p-4 flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">🎓</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-xs">For Students</h4>
+              <p class="text-[11px] text-slate-500">Stop guessing required skills; follow verified action plans.</p>
+            </div>
+          </div>
+          <div class="card-light p-4 flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">💼</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-xs">For Recruiters</h4>
+              <p class="text-[11px] text-slate-500">Interview only pre-evaluated candidates clearing test cutoffs.</p>
+            </div>
+          </div>
+          <div class="card-light p-4 flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold">🏛️</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-xs">For Institutions</h4>
+              <p class="text-[11px] text-slate-500">Transform placement reports into live curriculum feedback loops.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-100 pt-3">
+        <span>High Impact Solution for Regional Higher Education & Employment</span>
+        <span>08 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: SCALABILITY ROADMAP & FLOWCHART -->
+    <div class="slide justify-between bg-slate-50/50">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">SCALABILITY ROADMAP</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-2">
+          Designed to Scale: Dehradun Pilot to National Network
+        </h2>
+        <p class="text-slate-600 text-sm mb-6">
+          Architected for multi-tenant scalability — expanding seamlessly from regional hubs to nationwide institutional networks.
+        </p>
+
+        <!-- ROADMAP FLOWCHART DIAGRAM -->
+        <div class="grid grid-cols-4 gap-4 my-6">
+          <!-- Phase 1 -->
+          <div class="card-light p-5 border-t-4 border-indigo-600 bg-white shadow-sm relative">
+            <span class="text-[10px] font-extrabold uppercase bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded tracking-wider">PHASE 1 • NOW</span>
+            <h3 class="font-bold text-slate-900 text-base mt-2 mb-1">Dehradun Pilot</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              3 portals live on Supabase; role-based auth; shared skill graph; demo ready for judges.
+            </p>
+            <div class="text-[10px] text-slate-400 mt-3 font-semibold">📍 Focus: Dehradun & UTU Colleges</div>
+          </div>
+
+          <!-- Phase 2 -->
+          <div class="card-light p-5 border-t-4 border-emerald-600 bg-white shadow-sm relative">
+            <span class="text-[10px] font-extrabold uppercase bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded tracking-wider">PHASE 2 • NEXT</span>
+            <h3 class="font-bold text-slate-900 text-base mt-2 mb-1">Statewide Rollout</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Multi-tenant college onboarding; bulk student ingestion; configurable institute assessment banks.
+            </p>
+            <div class="text-[10px] text-slate-400 mt-3 font-semibold">📍 Focus: Uttarakhand Technical Ecosystem</div>
+          </div>
+
+          <!-- Phase 3 -->
+          <div class="card-light p-5 border-t-4 border-amber-600 bg-white shadow-sm relative">
+            <span class="text-[10px] font-extrabold uppercase bg-amber-100 text-amber-700 px-2 py-0.5 rounded tracking-wider">PHASE 3 • THEN</span>
+            <h3 class="font-bold text-slate-900 text-base mt-2 mb-1">Recruiter Network Effect</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Open Industry Suite to verified tech recruiters at scale; API-based ATS integrations.
+            </p>
+            <div class="text-[10px] text-slate-400 mt-3 font-semibold">📍 Focus: Pan-India Startup & IT Hiring</div>
+          </div>
+
+          <!-- Phase 4 -->
+          <div class="card-light p-5 border-t-4 border-purple-600 bg-white shadow-sm relative">
+            <span class="text-[10px] font-extrabold uppercase bg-purple-100 text-purple-700 px-2 py-0.5 rounded tracking-wider">PHASE 4 • LATER</span>
+            <h3 class="font-bold text-slate-900 text-base mt-2 mb-1">National Skill Intelligence</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Aggregate anonymized skill-gap trends across states to guide national education policy.
+            </p>
+            <div class="text-[10px] text-slate-400 mt-3 font-semibold">📍 Focus: Pan-India Workforce Intelligence</div>
+          </div>
+        </div>
+
+        <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-xl text-xs text-indigo-900 flex items-center justify-between">
+          <span class="font-semibold">⚡ Modular Architecture Advantage:</span>
+          <span>Adding new institutions or recruiter suites is a single configuration flag — zero code rewrite required.</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-200 pt-3">
+        <span>Scalable Multi-Tenant Architecture</span>
+        <span>09 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: PRODUCT & STARTUP POTENTIAL -->
+    <div class="slide justify-between bg-white">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">PRODUCT & STARTUP POTENTIAL</span>
+        <span class="text-xs font-semibold text-slate-400">Team Apex | SkillBridge AI</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-extrabold text-slate-900 font-heading mb-2">
+          A Three-Sided Marketplace with Recurring Revenue
+        </h2>
+        <p class="text-slate-600 text-sm mb-6">
+          Sustainable business model aligned with value creation for every user persona.
+        </p>
+
+        <!-- Revenue Model Cards -->
+        <div class="grid grid-cols-3 gap-6 mb-6">
+          <div class="card-light p-6 border-l-4 border-amber-500 bg-amber-50/20">
+            <div class="text-2xl mb-2">🏛️</div>
+            <h3 class="text-base font-bold text-slate-800">Institutions & Colleges</h3>
+            <span class="text-xs font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded inline-block my-2">SaaS License</span>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Per-seat annual SaaS subscription for placement cells: access to analytics, student dossiers, and curriculum gap reports.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-l-4 border-emerald-500 bg-emerald-50/20">
+            <div class="text-2xl mb-2">💼</div>
+            <h3 class="text-base font-bold text-slate-800">Recruiters & Employers</h3>
+            <span class="text-xs font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded inline-block my-2">Subscription + Per-Hire Fee</span>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Hiring suite subscription + success fee per verified talent hire via the automated 2-round assessment engine.
+            </p>
+          </div>
+
+          <div class="card-light p-6 border-l-4 border-indigo-500 bg-indigo-50/20">
+            <div class="text-2xl mb-2">🎓</div>
+            <h3 class="text-base font-bold text-slate-800">Students & Job Seekers</h3>
+            <span class="text-xs font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded inline-block my-2">Freemium + Pro Track</span>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Freemium core skill profile & matching, with premium advanced skill paths, interview prep, and micro-certifications.
+            </p>
+          </div>
+        </div>
+
+        <!-- Defensibility Moat -->
+        <div class="card-light p-5 border border-slate-200">
+          <h4 class="font-bold text-slate-800 text-sm mb-3">Why SkillBridge is a Sustainable Venture, Not Just a Hackathon Project:</h4>
+          <div class="grid grid-cols-2 gap-4 text-xs text-slate-600">
+            <div class="flex items-center space-x-2">
+              <span class="text-emerald-500 font-bold">✓</span>
+              <span><strong>Network Effects:</strong> Each new college brings verified talent recruiters want.</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-emerald-500 font-bold">✓</span>
+              <span><strong>Data Moat:</strong> Proprietary skill-gap & outcome dataset unavailable on static job boards.</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-emerald-500 font-bold">✓</span>
+              <span><strong>Expansion Path:</strong> Campus $\rightarrow$ State Level $\rightarrow$ Pan-India Workforce Intelligence Platform.</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-emerald-500 font-bold">✓</span>
+              <span><strong>Working Prototype:</strong> Full-stack prototype ready today de-risks technical execution.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-100 pt-3">
+        <span>High Commercial Potential & Clear Monetization Strategy</span>
+        <span>10 / 11</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: CONCLUSION & CALL TO ACTION -->
+    <div class="slide justify-between bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 text-white">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-black text-xl">
+            S
+          </div>
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-400 block">Dehradun Hackathon 2026</span>
+            <span class="text-sm font-bold text-slate-300">Team Apex Pitch Summary</span>
+          </div>
+        </div>
+        <div class="bg-indigo-950 border border-indigo-700 px-4 py-1 rounded-full">
+          <span class="text-xs font-extrabold text-indigo-300 tracking-wide">TEAM APEX</span>
+        </div>
+      </div>
+
+      <div class="my-auto py-6">
+        <h2 class="text-5xl font-extrabold text-white font-heading mb-4">
+          SkillBridge <span class="text-indigo-400">AI</span>
+        </h2>
+        <p class="text-xl text-slate-300 max-w-3xl leading-relaxed mb-8">
+          From guesswork to verified readiness — for students, recruiters, and institutions, on one shared platform.
+        </p>
+
+        <div class="grid grid-cols-3 gap-6 max-w-4xl mb-8">
+          <div class="bg-slate-900/80 border border-indigo-500/40 p-5 rounded-2xl">
+            <div class="w-10 h-10 rounded-lg bg-indigo-600/30 text-indigo-400 flex items-center justify-center font-bold text-xl mb-3">🚀</div>
+            <h4 class="font-bold text-white text-sm mb-1">Working Prototype Ready</h4>
+            <p class="text-xs text-slate-400">Live multi-portal web app connected to Supabase backend.</p>
+          </div>
+
+          <div class="bg-slate-900/80 border border-emerald-500/40 p-5 rounded-2xl">
+            <div class="w-10 h-10 rounded-lg bg-emerald-600/30 text-emerald-400 flex items-center justify-center font-bold text-xl mb-3">🎯</div>
+            <h4 class="font-bold text-white text-sm mb-1">Round 2 Roadmap Scoped</h4>
+            <p class="text-xs text-slate-400">Live code demo, candidate filtering, and assessment execution ready.</p>
+          </div>
+
+          <div class="bg-slate-900/80 border border-amber-500/40 p-5 rounded-2xl">
+            <div class="w-10 h-10 rounded-lg bg-amber-600/30 text-amber-400 flex items-center justify-center font-bold text-xl mb-3">⛰️</div>
+            <h4 class="font-bold text-white text-sm mb-1">Uttarakhand & Beyond</h4>
+            <p class="text-xs text-slate-400">Engineered to empower regional higher education talent pipelines.</p>
+          </div>
+        </div>
+
+        <div class="inline-flex items-center space-x-3 bg-indigo-600 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg">
+          <span>We are ready to present our live demo in Round 2!</span>
+          <span>→</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-500 border-t border-slate-800 pt-4">
+        <span>Team Apex • SkillBridge AI</span>
+        <span>Thank You Judges!</span>
+        <span>11 / 11</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT CONTROLLER FOR SLIDES -->
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const indicator = document.getElementById('slide-indicator');
+
+    function showSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      
+      slides.forEach((s, i) => {
+        if (i === index) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+      
+      currentSlide = index;
+      if (indicator) {
+        indicator.textContent = `Slide ${currentSlide + 1} / ${slides.length}`;
+      }
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.log(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      } else if (e.key === 'Home') {
+        showSlide(0);
+      } else if (e.key === 'End') {
+        showSlide(slides.length - 1);
+      }
+    });
+  </script>
+</body>
+</html>

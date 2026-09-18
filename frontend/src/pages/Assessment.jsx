@@ -45,594 +45,73 @@ const MARKS_PER_WRONG = 0.25;
 const CUTOFF_PERCENTAGE = 60;
 
 // ============================================================
-// 25 QUESTION SKILL ASSESSMENT
-// First 25 questions from the existing question bank
+// QUESTION BANKS (imported from data files)
 // ============================================================
 
-const ALL_QUESTIONS = [
-  // ==========================================================
-  // PYTHON — 10 QUESTIONS
-  // ==========================================================
+import { MCQ_QUESTION_BANK } from "../data/questionBank.js";
+import { CODING_QUESTION_BANK } from "../data/codingQuestionBank.js";
 
-  {
-    id: 1,
-    skill: "Python",
-    question: "Which Python data structure stores key-value pairs?",
-    options: ["List", "Tuple", "Dictionary", "Set"],
-    answer: "Dictionary",
-    difficulty: "Easy",
-  },
+// ============================================================
+// RANDOMIZED QUESTION SELECTION
+// Each user gets a different set of 25 MCQs balanced across
+// all subjects (~4 per subject). Uses a seeded shuffle so the
+// same user sees the same questions within a session.
+// ============================================================
 
-  {
-    id: 2,
-    skill: "Python",
-    question: "What is the output of len([10, 20, 30])?",
-    options: ["2", "3", "4", "Error"],
-    answer: "3",
-    difficulty: "Easy",
-  },
+function seededShuffle(array, seed) {
+  const arr = [...array];
+  let s = seed;
+  for (let i = arr.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
-  {
-    id: 3,
-    skill: "Python",
-    question: "Which keyword is used to define a function in Python?",
-    options: ["function", "func", "def", "define"],
-    answer: "def",
-    difficulty: "Easy",
-  },
+function selectRandomMCQs(bank, count = 25) {
+  // Generate a seed from timestamp so each assessment attempt is unique
+  const seed = Date.now() % 1000000;
 
-  {
-    id: 4,
-    skill: "Python",
-    question: "Which of the following is immutable in Python?",
-    options: ["List", "Dictionary", "Set", "Tuple"],
-    answer: "Tuple",
-    difficulty: "Easy",
-  },
+  // Group questions by skill
+  const bySkill = {};
+  for (const q of bank) {
+    if (!bySkill[q.skill]) bySkill[q.skill] = [];
+    bySkill[q.skill].push(q);
+  }
 
-  {
-    id: 5,
-    skill: "Python",
-    question: "What does the append() method do to a list?",
-    options: [
-      "Removes an item",
-      "Adds an item to the end",
-      "Sorts the list",
-      "Reverses the list",
-    ],
-    answer: "Adds an item to the end",
-    difficulty: "Easy",
-  },
+  const skills = Object.keys(bySkill);
+  const perSkill = Math.floor(count / skills.length); // 4 per subject
+  const remainder = count - perSkill * skills.length;  // leftover slots
 
-  {
-    id: 6,
-    skill: "Python",
-    question: "Which symbol is used for a single-line comment in Python?",
-    options: ["//", "#", "/*", "--"],
-    answer: "#",
-    difficulty: "Easy",
-  },
+  const selected = [];
+  const shuffledSkills = seededShuffle(skills, seed);
 
-  {
-    id: 7,
-    skill: "Python",
-    question: "What is the output of 10 // 3 in Python?",
-    options: ["3", "3.33", "1", "4"],
-    answer: "3",
-    difficulty: "Medium",
-  },
+  shuffledSkills.forEach((skill, idx) => {
+    const pool = seededShuffle(bySkill[skill], seed + idx);
+    const take = perSkill + (idx < remainder ? 1 : 0);
+    selected.push(...pool.slice(0, take));
+  });
 
-  {
-    id: 8,
-    skill: "Python",
-    question: "Which keyword is used to handle exceptions?",
-    options: ["catch", "error", "try", "exception"],
-    answer: "try",
-    difficulty: "Medium",
-  },
+  // Final shuffle so questions aren't grouped by skill
+  const finalQuestions = seededShuffle(selected, seed + 999);
 
-  {
-    id: 9,
-    skill: "Python",
-    question: "Which function returns the number of items in an object?",
-    options: ["count()", "size()", "length()", "len()"],
-    answer: "len()",
-    difficulty: "Easy",
-  },
+  // Re-assign sequential IDs for the current quiz
+  return finalQuestions.map((q, i) => ({ ...q, id: i + 1 }));
+}
 
-  {
-    id: 10,
-    skill: "Python",
-    question: "What does range(5) generate?",
-    options: [
-      "1, 2, 3, 4, 5",
-      "0, 1, 2, 3, 4",
-      "0, 1, 2, 3, 4, 5",
-      "5 only",
-    ],
-    answer: "0, 1, 2, 3, 4",
-    difficulty: "Medium",
-  },
+function selectRandomCodingQuestions(bank, count = 2) {
+  const seed = Date.now() % 1000000;
+  const shuffled = seededShuffle(bank, seed);
+  return shuffled.slice(0, count);
+}
 
-  // ==========================================================
-  // SQL — 10 QUESTIONS
-  // ==========================================================
+// Select 25 random MCQs for this assessment session
+const QUESTIONS = selectRandomMCQs(MCQ_QUESTION_BANK, 25);
 
-  {
-    id: 11,
-    skill: "SQL",
-    question: "Which SQL command is used to retrieve data?",
-    options: ["INSERT", "SELECT", "UPDATE", "DELETE"],
-    answer: "SELECT",
-    difficulty: "Easy",
-  },
+// Select 2 random coding questions for Round 2
+const SELECTED_CODING_QUESTIONS = selectRandomCodingQuestions(CODING_QUESTION_BANK, 2);
 
-  {
-    id: 12,
-    skill: "SQL",
-    question: "Which clause is used to filter rows in SQL?",
-    options: ["ORDER BY", "GROUP BY", "WHERE", "JOIN"],
-    answer: "WHERE",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 13,
-    skill: "SQL",
-    question: "Which command is used to add a new record to a table?",
-    options: ["ADD", "INSERT", "CREATE", "UPDATE"],
-    answer: "INSERT",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 14,
-    skill: "SQL",
-    question: "Which command modifies existing records?",
-    options: ["CHANGE", "MODIFY", "UPDATE", "ALTER"],
-    answer: "UPDATE",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 15,
-    skill: "SQL",
-    question: "Which command removes records from a table?",
-    options: ["REMOVE", "DELETE", "DROP", "CLEAR"],
-    answer: "DELETE",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 16,
-    skill: "SQL",
-    question: "Which keyword removes duplicate rows from a SELECT result?",
-    options: ["UNIQUE", "DISTINCT", "ONLY", "FILTER"],
-    answer: "DISTINCT",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 17,
-    skill: "SQL",
-    question: "Which clause is used to sort query results?",
-    options: ["SORT BY", "ORDER BY", "GROUP BY", "ARRANGE BY"],
-    answer: "ORDER BY",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 18,
-    skill: "SQL",
-    question: "Which function returns the number of rows?",
-    options: ["SUM()", "COUNT()", "TOTAL()", "NUMBER()"],
-    answer: "COUNT()",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 19,
-    skill: "SQL",
-    question: "Which JOIN returns matching records from both tables?",
-    options: ["INNER JOIN", "LEFT JOIN", "FULL JOIN", "CROSS JOIN"],
-    answer: "INNER JOIN",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 20,
-    skill: "SQL",
-    question: "Which constraint uniquely identifies each row in a table?",
-    options: ["FOREIGN KEY", "UNIQUE", "PRIMARY KEY", "CHECK"],
-    answer: "PRIMARY KEY",
-    difficulty: "Medium",
-  },
-
-  // ==========================================================
-  // REACT — 10 QUESTIONS
-  // ==========================================================
-
-  {
-    id: 21,
-    skill: "React",
-    question: "Which hook is commonly used to manage state in React?",
-    options: ["useState", "useRoute", "useStyle", "usePage"],
-    answer: "useState",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 22,
-    skill: "React",
-    question:
-      "Which syntax is commonly used to render a JavaScript expression in JSX?",
-    options: ["[]", "{}", "()", "<>"],
-    answer: "{}",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 23,
-    skill: "React",
-    question: "Which hook is commonly used for side effects?",
-    options: ["useEffect", "useAction", "useSide", "useEvent"],
-    answer: "useEffect",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 24,
-    skill: "React",
-    question: "What does JSX allow developers to write?",
-    options: [
-      "SQL inside JavaScript",
-      "HTML-like syntax inside JavaScript",
-      "Python inside HTML",
-      "CSS inside SQL",
-    ],
-    answer: "HTML-like syntax inside JavaScript",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 25,
-    skill: "React",
-    question:
-      "What is used to pass data from a parent component to a child?",
-    options: ["State", "Props", "Hooks", "Events"],
-    answer: "Props",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 26,
-    skill: "React",
-    question: "Which method is commonly used to render a list of elements?",
-    options: ["forEach()", "map()", "filter()", "reduce()"],
-    answer: "map()",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 27,
-    skill: "React",
-    question: "Why is a key prop used when rendering lists?",
-    options: [
-      "To style elements",
-      "To identify elements efficiently",
-      "To create routes",
-      "To store passwords",
-    ],
-    answer: "To identify elements efficiently",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 28,
-    skill: "React",
-    question: "What happens when React state is updated?",
-    options: [
-      "The component can re-render",
-      "The browser closes",
-      "The database is deleted",
-      "The server restarts",
-    ],
-    answer: "The component can re-render",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 29,
-    skill: "React",
-    question:
-      "Which command commonly creates a new React project with Vite?",
-    options: [
-      "npm create vite@latest",
-      "npm react new",
-      "react create app",
-      "npm start-react",
-    ],
-    answer: "npm create vite@latest",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 30,
-    skill: "React",
-    question:
-      "Which hook is commonly used to access a DOM element or store a mutable value?",
-    options: ["useRef", "useDOM", "useElement", "useValue"],
-    answer: "useRef",
-    difficulty: "Medium",
-  },
-
-  // ==========================================================
-  // FASTAPI — 10 QUESTIONS
-  // ==========================================================
-
-  {
-    id: 31,
-    skill: "FastAPI",
-    question: "FastAPI is primarily used for building what?",
-    options: [
-      "Mobile applications",
-      "Web APIs",
-      "Operating systems",
-      "Databases",
-    ],
-    answer: "Web APIs",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 32,
-    skill: "FastAPI",
-    question: "Which decorator is commonly used for a GET endpoint?",
-    options: [
-      "@app.get()",
-      "@app.fetch()",
-      "@api.read()",
-      "@route.getdata()",
-    ],
-    answer: "@app.get()",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 33,
-    skill: "FastAPI",
-    question: "Which decorator is commonly used for a POST endpoint?",
-    options: [
-      "@app.send()",
-      "@app.post()",
-      "@app.create()",
-      "@api.postdata()",
-    ],
-    answer: "@app.post()",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 34,
-    skill: "FastAPI",
-    question:
-      "Which Python server is commonly used to run FastAPI applications?",
-    options: ["Apache", "Uvicorn", "MySQL", "MongoDB"],
-    answer: "Uvicorn",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 35,
-    skill: "FastAPI",
-    question:
-      "Which library is commonly used by FastAPI for data validation?",
-    options: ["Pydantic", "NumPy", "Pandas", "Matplotlib"],
-    answer: "Pydantic",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 36,
-    skill: "FastAPI",
-    question:
-      "Which HTTP status code normally indicates a successful request?",
-    options: ["200", "404", "500", "301"],
-    answer: "200",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 37,
-    skill: "FastAPI",
-    question:
-      "Which HTTP status code usually means 'Not Found'?",
-    options: ["200", "201", "404", "500"],
-    answer: "404",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 38,
-    skill: "FastAPI",
-    question:
-      "What is the purpose of a Pydantic model in FastAPI?",
-    options: [
-      "Database backup",
-      "Request/response data validation",
-      "CSS styling",
-      "Git management",
-    ],
-    answer: "Request/response data validation",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 39,
-    skill: "FastAPI",
-    question:
-      "Which command starts a FastAPI application using Uvicorn?",
-    options: [
-      "python start fastapi",
-      "uvicorn app.main:app --reload",
-      "fastapi start server",
-      "npm run fastapi",
-    ],
-    answer: "uvicorn app.main:app --reload",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 40,
-    skill: "FastAPI",
-    question:
-      "Which HTTP method is generally used to partially update a resource?",
-    options: ["GET", "POST", "PATCH", "HEAD"],
-    answer: "PATCH",
-    difficulty: "Medium",
-  },
-
-  // ==========================================================
-  // GIT — 10 QUESTIONS
-  // ==========================================================
-
-  {
-    id: 41,
-    skill: "Git",
-    question: "Which command creates a new Git repository?",
-    options: ["git start", "git init", "git create", "git new"],
-    answer: "git init",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 42,
-    skill: "Git",
-    question:
-      "Which command uploads committed changes to a remote repository?",
-    options: ["git upload", "git push", "git send", "git deploy"],
-    answer: "git push",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 43,
-    skill: "Git",
-    question:
-      "Which command downloads changes from a remote repository?",
-    options: [
-      "git download",
-      "git pull",
-      "git fetch-all",
-      "git receive",
-    ],
-    answer: "git pull",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 44,
-    skill: "Git",
-    question: "Which command creates a commit?",
-    options: [
-      "git save",
-      "git commit",
-      "git store",
-      "git snapshot",
-    ],
-    answer: "git commit",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 45,
-    skill: "Git",
-    question:
-      "Which command shows the current working tree status?",
-    options: [
-      "git check",
-      "git status",
-      "git state",
-      "git info",
-    ],
-    answer: "git status",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 46,
-    skill: "Git",
-    question: "Which command creates a new branch?",
-    options: [
-      "git branch branch-name",
-      "git new branch-name",
-      "git create branch-name",
-      "git branch-new branch-name",
-    ],
-    answer: "git branch branch-name",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 47,
-    skill: "Git",
-    question: "Which command switches to another branch?",
-    options: [
-      "git switch",
-      "git move",
-      "git change",
-      "git branch-change",
-    ],
-    answer: "git switch",
-    difficulty: "Medium",
-  },
-
-  {
-    id: 48,
-    skill: "Git",
-    question: "Which command shows previous commits?",
-    options: [
-      "git history",
-      "git commits",
-      "git log",
-      "git previous",
-    ],
-    answer: "git log",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 49,
-    skill: "Git",
-    question:
-      "Which command stages a file before committing?",
-    options: [
-      "git stage file",
-      "git add file",
-      "git prepare file",
-      "git commit file",
-    ],
-    answer: "git add file",
-    difficulty: "Easy",
-  },
-
-  {
-    id: 50,
-    skill: "Git",
-    question: "What is GitHub primarily used for?",
-    options: [
-      "Hosting and collaborating on Git repositories",
-      "Running SQL databases",
-      "Creating Python virtual environments",
-      "Designing websites",
-    ],
-    answer: "Hosting and collaborating on Git repositories",
-    difficulty: "Easy",
-  },
-];
-
-// Round 1 uses exactly 25 questions.
-const QUESTIONS = ALL_QUESTIONS.slice(0, 25);
 
 // ============================================================
 // COMPONENT
@@ -697,282 +176,8 @@ function Assessment({ currentUser }) {
   ];
 
   const ROUND_TWO_TEMPLATES = {
-    1: {
-      java: `import java.io.*;
-import java.util.*;
-
-public class Main {
-    public static int lengthOfLongestSubstring(String s) {
-        // Write your solution here
-        return 0;
-    }
-
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String s = br.readLine();
-        if (s == null) s = "";
-        System.out.println(lengthOfLongestSubstring(s));
-    }
-}`,
-
-      python: `def lengthOfLongestSubstring(s):
-    # Write your solution here
-    return 0
-
-s = input() if True else ""
-print(lengthOfLongestSubstring(s))`,
-
-      c: `#include <stdio.h>
-#include <string.h>
-
-int lengthOfLongestSubstring(const char *s) {
-    // Write your solution here
-    return 0;
-}
-
-int main(void) {
-    char s[10005];
-    if (fgets(s, sizeof(s), stdin) == NULL) s[0] = '\\0';
-    s[strcspn(s, "\\r\\n")] = '\\0';
-    printf("%d\\n", lengthOfLongestSubstring(s));
-    return 0;
-}`,
-
-      cpp: `#include <bits/stdc++.h>
-using namespace std;
-
-int lengthOfLongestSubstring(const string& s) {
-    // Write your solution here
-    return 0;
-}
-
-int main() {
-    string s;
-    getline(cin, s);
-    cout << lengthOfLongestSubstring(s) << "\\n";
-    return 0;
-}`,
-    },
-
-    2: {
-      java: `import java.io.*;
-import java.util.*;
-
-public class Main {
-    // Production inventory processor.
-    public static Map<String, Integer> processInventory(List<String[]> events) {
-        Map<String, Integer> inventory = new HashMap<>();
-        Set<String> processedEvents = new HashSet<>();
-
-        for (String[] event : events) {
-            String eventId = event[0];
-            String eventType = event[1];
-            String sku = event[2];
-            int quantity = Integer.parseInt(event[3]);
-
-            if (processedEvents.contains(eventId)) continue;
-            processedEvents.add(eventId);
-            inventory.putIfAbsent(sku, 0);
-
-            if (eventType.equals("RESERVE")) {
-                inventory.put(sku, inventory.get(sku) - quantity);
-            } else if (eventType.equals("RELEASE")) {
-                // Apply the event to the current inventory.
-                inventory.put(sku, inventory.get(sku) - quantity);
-            }
-        }
-
-        return inventory;
-    }
-
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine().trim());
-        List<String[]> events = new ArrayList<>();
-
-        for (int i = 0; i < n; i++) {
-            events.add(br.readLine().trim().split("\\\\s+"));
-        }
-
-        Map<String, Integer> inventory = processInventory(events);
-        List<String> skus = new ArrayList<>(inventory.keySet());
-        Collections.sort(skus);
-
-        for (String sku : skus) {
-            System.out.println(sku + " " + inventory.get(sku));
-        }
-    }
-}`,
-
-      python: `def process_inventory(events):
-    inventory = {}
-    processed_events = set()
-
-    for event_id, event_type, sku, quantity in events:
-        # Ignore duplicate deliveries.
-        if event_id in processed_events:
-            continue
-        processed_events.add(event_id)
-
-        if sku not in inventory:
-            inventory[sku] = 0
-
-        if event_type == "RESERVE":
-            inventory[sku] -= quantity
-        elif event_type == "RELEASE":
-            # Apply the release event to the current inventory.
-            inventory[sku] -= quantity
-
-    return inventory
-
-n = int(input().strip())
-events = [input().split() for _ in range(n)]
-
-inventory = process_inventory(events)
-for sku in sorted(inventory):
-    print(sku, inventory[sku])`,
-
-      c: `#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MAX_SKUS 100000
-#define MAX_LEN 64
-
-typedef struct {
-    char id[MAX_LEN];
-    char type[MAX_LEN];
-    char sku[MAX_LEN];
-    int quantity;
-} Event;
-
-// Production inventory processor.
-// Apply each event to the current inventory.
-void processInventory(Event events[], int n) {
-    char processed[MAX_SKUS][MAX_LEN];
-    int processedCount = 0;
-
-    char skuNames[MAX_SKUS][MAX_LEN];
-    int inventory[MAX_SKUS];
-    int skuCount = 0;
-
-    for (int i = 0; i < n; i++) {
-        int duplicate = 0;
-        for (int j = 0; j < processedCount; j++) {
-            if (strcmp(processed[j], events[i].id) == 0) {
-                duplicate = 1;
-                break;
-            }
-        }
-        if (duplicate) continue;
-
-        strcpy(processed[processedCount++], events[i].id);
-
-        int index = -1;
-        for (int j = 0; j < skuCount; j++) {
-            if (strcmp(skuNames[j], events[i].sku) == 0) {
-                index = j;
-                break;
-            }
-        }
-
-        if (index == -1) {
-            index = skuCount++;
-            strcpy(skuNames[index], events[i].sku);
-            inventory[index] = 0;
-        }
-
-        if (strcmp(events[i].type, "RESERVE") == 0) {
-            inventory[index] -= events[i].quantity;
-        } else if (strcmp(events[i].type, "RELEASE") == 0) {
-            // Apply the event to the current inventory.
-            inventory[index] -= events[i].quantity;
-        }
-    }
-
-    // Sort SKUs lexicographically for output.
-    for (int i = 0; i < skuCount; i++) {
-        for (int j = i + 1; j < skuCount; j++) {
-            if (strcmp(skuNames[i], skuNames[j]) > 0) {
-                char tempName[MAX_LEN];
-                strcpy(tempName, skuNames[i]);
-                strcpy(skuNames[i], skuNames[j]);
-                strcpy(skuNames[j], tempName);
-
-                int tempValue = inventory[i];
-                inventory[i] = inventory[j];
-                inventory[j] = tempValue;
-            }
-        }
-    }
-
-    for (int i = 0; i < skuCount; i++) {
-        printf("%s %d\\n", skuNames[i], inventory[i]);
-    }
-}
-
-int main(void) {
-    int n;
-    scanf("%d", &n);
-
-    Event *events = malloc(sizeof(Event) * n);
-    for (int i = 0; i < n; i++) {
-        scanf("%63s %63s %63s %d", events[i].id, events[i].type, events[i].sku, &events[i].quantity);
-    }
-
-    processInventory(events, n);
-    free(events);
-    return 0;
-}`,
-
-      cpp: `#include <bits/stdc++.h>
-using namespace std;
-
-// Production inventory processor.
-// Apply each event to the current inventory.
-map<string, int> processInventory(const vector<array<string, 4>>& events) {
-    map<string, int> inventory;
-    set<string> processedEvents;
-
-    for (const auto& event : events) {
-        const string& eventId = event[0];
-        const string& eventType = event[1];
-        const string& sku = event[2];
-        int quantity = stoi(event[3]);
-
-        if (processedEvents.count(eventId)) continue;
-        processedEvents.insert(eventId);
-
-        if (!inventory.count(sku)) inventory[sku] = 0;
-
-        if (eventType == "RESERVE") {
-            inventory[sku] -= quantity;
-        } else if (eventType == "RELEASE") {
-            // Apply the release event to the current inventory.
-            inventory[sku] -= quantity;
-        }
-    }
-
-    return inventory;
-}
-
-int main() {
-    int n;
-    cin >> n;
-
-    vector<array<string, 4>> events(n);
-    for (auto& event : events) {
-        cin >> event[0] >> event[1] >> event[2] >> event[3];
-    }
-
-    auto inventory = processInventory(events);
-    for (const auto& [sku, quantity] : inventory) {
-        cout << sku << " " << quantity << "\\n";
-    }
-
-    return 0;
-}`,
-    },
+    1: SELECTED_CODING_QUESTIONS[0]?.templates || {},
+    2: SELECTED_CODING_QUESTIONS[1]?.templates || {},
   };
 
   const [round2Question, setRound2Question] = useState(1);
@@ -1053,8 +258,8 @@ int main() {
     }));
   };
 
-  // Round 2 is an independent 60-minute coding assessment.
-  const ROUND_TWO_TOTAL_TIME = 60 * 60;
+  // Round 2 is an independent 30-minute coding assessment.
+  const ROUND_TWO_TOTAL_TIME = 30 * 60;
   const [round2TimeLeft, setRound2TimeLeft] =
     useState(ROUND_TWO_TOTAL_TIME);
 
@@ -1413,40 +618,14 @@ int main() {
   // ==========================================================
 
   const ROUND_TWO_TEST_CASES_BY_QUESTION = {
-    1: [
-      { input: "abcabcbb", expected: 3 },
-      { input: "bbbbb", expected: 1 },
-      { input: "pwwkew", expected: 3 },
-      { input: "", expected: 0 },
-      { input: "dvdf", expected: 3 },
-      { input: "abba", expected: 2 },
-    ],
-    2: [
-      {
-        input: "6\nE1 RESERVE LAPTOP 5\nE2 RESERVE PHONE 3\nE1 RESERVE LAPTOP 5\nE3 RELEASE LAPTOP 2\nE4 RELEASE PHONE 1\nE5 RESERVE PHONE 2",
-        expected: "LAPTOP -3\nPHONE -4",
-      },
-      {
-        input: "7\nA1 RESERVE MOUSE 10\nA2 RELEASE MOUSE 3\nA3 RESERVE KEYBOARD 5\nA2 RELEASE MOUSE 3\nA4 RESERVE MOUSE 2\nA5 RELEASE KEYBOARD 1\nA1 RESERVE MOUSE 10",
-        expected: "KEYBOARD -4\nMOUSE -9",
-      },
-      {
-        input: "5\nX1 RESERVE MONITOR 4\nX2 RELEASE MONITOR 1\nX3 RELEASE MONITOR 2\nX4 RESERVE MONITOR 3\nX3 RELEASE MONITOR 2",
-        expected: "MONITOR -4",
-      },
-      {
-        input: "4\nR1 RELEASE CAMERA 8\nR2 RESERVE CAMERA 3\nR1 RELEASE CAMERA 8\nR3 RESERVE CAMERA 2",
-        expected: "CAMERA 3",
-      },
-      {
-        input: "8\nP1 RESERVE TABLET 12\nP2 RELEASE TABLET 4\nP3 RESERVE PHONE 7\nP4 RELEASE PHONE 2\nP2 RELEASE TABLET 4\nP5 RELEASE TABLET 1\nP6 RESERVE PHONE 3\nP3 RESERVE PHONE 7",
-        expected: "PHONE -8\nTABLET -7",
-      },
-      {
-        input: "3\nZ1 RELEASE WATCH 5\nZ2 RELEASE LAPTOP 2\nZ3 RESERVE WATCH 1",
-        expected: "LAPTOP 2\nWATCH 4",
-      },
-    ],
+    1: (SELECTED_CODING_QUESTIONS[0]?.testCases || []).map(tc => ({
+      input: tc.input,
+      expected: tc.expected,
+    })),
+    2: (SELECTED_CODING_QUESTIONS[1]?.testCases || []).map(tc => ({
+      input: tc.input,
+      expected: tc.expected,
+    })),
   };
 
   const ROUND_TWO_TEST_CASES =
@@ -1454,62 +633,39 @@ int main() {
 
   const ROUND_TWO_QUESTION_DETAILS = {
     1: {
-      type: "LeetCode Medium",
-      title: "Longest Substring Without Repeating Characters",
-      summary:
-        'Given a string s, return the length of the longest substring that contains no repeated characters.',
-      scenario:
-        "This is a standard algorithmic screening problem. Aim for an O(n) sliding-window solution rather than repeatedly checking every substring.",
-      examples: [
-        { input: '"abcabcbb"', output: "3" },
-        { input: '"bbbbb"', output: "1" },
-        { input: '"pwwkew"', output: "3" },
-      ],
-      inputFormat:
-        "A single line containing the string s.",
-      outputFormat:
-        "Print one integer: the length of the longest substring without repeating characters.",
-      constraints: [
-        "0 <= length(s) <= 100000",
-        "The string may contain letters, digits, symbols, and spaces.",
-      ],
+      type: SELECTED_CODING_QUESTIONS[0]?.difficulty || "Medium",
+      title: SELECTED_CODING_QUESTIONS[0]?.title || "Coding Question 1",
+      summary: SELECTED_CODING_QUESTIONS[0]?.description || "",
+      scenario: "",
+      examples: (SELECTED_CODING_QUESTIONS[0]?.examples || []).map(ex => ({
+        input: ex.input,
+        output: ex.output,
+        ...(ex.explanation ? { explanation: ex.explanation } : {}),
+      })),
+      inputFormat: "Read input from stdin as described above.",
+      outputFormat: "Print the result to stdout.",
+      constraints: SELECTED_CODING_QUESTIONS[0]?.constraints || [],
       requirements: [
-        "Return only the maximum length.",
-        "Function name must be lengthOfLongestSubstring.",
         "Your program must compile and produce the expected output.",
+        "Read from stdin and write to stdout.",
       ],
     },
     2: {
-      type: "Scenario + Debugging",
-      title: "Production Incident: Inventory Reservation Bug",
-      summary:
-        "You are a backend engineer for an e-commerce platform. During a flash sale, an inventory service processes RESERVE and RELEASE events. A production incident shows that available-stock numbers are incorrect because the current event processor contains a logic bug.",
-      scenario:
-        "Each event has a unique event_id, but network retries can deliver the same event more than once. A RESERVE event decreases available inventory, while a RELEASE event increases it. Duplicate event_ids must be processed only once, events must be handled in arrival order, and the final SKUs must be printed in lexicographical order. Debug the provided starter code and fix the production logic without changing the input/output format.",
-      examples: [
-        { input: "6 events → E1 RESERVE LAPTOP 5; E2 RESERVE PHONE 3; E1 duplicate; E3 RELEASE LAPTOP 2; E4 RELEASE PHONE 1; E5 RESERVE PHONE 2", output: "LAPTOP -3\nPHONE -4" },
-        { input: "7 events → A1 RESERVE MOUSE 10; A2 RELEASE MOUSE 3; A3 RESERVE KEYBOARD 5; A2 duplicate; A4 RESERVE MOUSE 2; A5 RELEASE KEYBOARD 1; A1 duplicate", output: "KEYBOARD -4\nMOUSE -9" },
-        { input: "5 events → X1 RESERVE MONITOR 4; X2 RELEASE MONITOR 1; X3 RELEASE MONITOR 2; X4 RESERVE MONITOR 3; X3 duplicate", output: "MONITOR -4" },
-      ],
-      inputFormat:
-        "First line: N. Next N lines: event_id event_type sku quantity. event_type is RESERVE or RELEASE.",
-      outputFormat:
-        "Print one line per SKU as SKU FINAL_INVENTORY. SKUs must be printed in lexicographical order.",
-      constraints: [
-        "1 <= N <= 100000",
-        "1 <= quantity <= 10000",
-        "1 <= length(event_id), length(sku) <= 30",
-        "The same event_id may appear multiple times and duplicates may occur anywhere.",
-      ],
+      type: SELECTED_CODING_QUESTIONS[1]?.difficulty || "Medium",
+      title: SELECTED_CODING_QUESTIONS[1]?.title || "Coding Question 2",
+      summary: SELECTED_CODING_QUESTIONS[1]?.description || "",
+      scenario: "",
+      examples: (SELECTED_CODING_QUESTIONS[1]?.examples || []).map(ex => ({
+        input: ex.input,
+        output: ex.output,
+        ...(ex.explanation ? { explanation: ex.explanation } : {}),
+      })),
+      inputFormat: "Read input from stdin as described above.",
+      outputFormat: "Print the result to stdout.",
+      constraints: SELECTED_CODING_QUESTIONS[1]?.constraints || [],
       requirements: [
-        "Process every unique event_id exactly once.",
-        "RESERVE decreases available inventory by quantity.",
-        "RELEASE increases available inventory by quantity.",
-        "Do not sort or reorder events while processing them.",
-        "Keep inventory independently for every SKU.",
-        "Print every encountered SKU in lexicographical order.",
-        "Do not change the input/output format.",
-        "Debug the provided starter code and make it work for visible and hidden test cases.",
+        "Your program must compile and produce the expected output.",
+        "Read from stdin and write to stdout.",
       ],
     },
   };
@@ -1916,6 +1072,42 @@ int main() {
       false;
   };
 
+  const resetRound1 = () => {
+    if (
+      (Object.keys(answers).length > 0 || currentQuestion > 0 || submitted) &&
+      !window.confirm("Reset Round 1? This will clear all your answers and restart the 15-minute timer.")
+    ) {
+      return;
+    }
+    setAnswers({});
+    setCurrentQuestion(0);
+    setTimeLeft(TOTAL_TIME);
+    setSubmitted(false);
+    setSaving(false);
+    setSaveMessage("");
+    setError("");
+    submitTriggeredRef.current = false;
+  };
+
+  const resetRound2 = () => {
+    const hasProgress =
+      round2QuestionStates[1]?.submitted ||
+      round2QuestionStates[2]?.submitted ||
+      (round2QuestionStates[1]?.testResults?.length || 0) > 0 ||
+      (round2QuestionStates[2]?.testResults?.length || 0) > 0;
+
+    if (
+      hasProgress &&
+      !window.confirm("Reset Round 2? This will restore initial code templates, clear test results, and restart the 30-minute timer.")
+    ) {
+      return;
+    }
+    setRound2Question(1);
+    setRound2QuestionStates(createInitialRound2QuestionStates());
+    setRound2Running(false);
+    setRound2TimeLeft(ROUND_TWO_TOTAL_TIME);
+  };
+
   // ==========================================================
   // PROGRESS
   // ==========================================================
@@ -2030,9 +1222,22 @@ int main() {
                   </h2>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-3 py-2 text-sm font-semibold text-cyan-300">
-                <Clock3 size={16} />
-                {assessmentStarted && !submitted ? formattedTime : "15:00"}
+              <div className="flex items-center gap-2">
+                {assessmentStarted && !submitted && (
+                  <button
+                    type="button"
+                    onClick={resetRound1}
+                    title="Reset Round 1 answers and timer"
+                    className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-violet-500 hover:bg-slate-800 hover:text-white"
+                  >
+                    <RotateCcw size={14} />
+                    Reset
+                  </button>
+                )}
+                <div className="flex items-center gap-2 rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-3 py-2 text-sm font-semibold text-cyan-300">
+                  <Clock3 size={16} />
+                  {assessmentStarted && !submitted ? formattedTime : "15:00"}
+                </div>
               </div>
             </div>
 
@@ -2165,6 +1370,15 @@ int main() {
                   >
                     Previous
                   </button>
+                  <button
+                    type="button"
+                    onClick={resetRound1}
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-700 bg-slate-950/60 px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:border-violet-500 hover:text-white"
+                    title="Reset Round 1 answers and timer"
+                  >
+                    <RotateCcw size={15} />
+                    Reset
+                  </button>
                   {currentQuestion < QUESTIONS.length - 1 ? (
                     <button
                       type="button"
@@ -2205,13 +1419,26 @@ int main() {
                   <h2 className="text-2xl font-bold text-white">Technical Coding</h2>
                 </div>
               </div>
-              <div className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold ${
-                round2TimeLeft <= 300
-                  ? "border-red-500/30 bg-red-500/10 text-red-400"
-                  : "border-cyan-500/20 bg-cyan-500/5 text-cyan-300"
-              }`}>
-                <Clock3 size={16} />
-                {round2Started ? round2FormattedTime : "60:00"}
+              <div className="flex items-center gap-2">
+                {round2Started && (
+                  <button
+                    type="button"
+                    onClick={resetRound2}
+                    title="Reset Round 2 code, test results, and timer"
+                    className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-emerald-500 hover:bg-slate-800 hover:text-white"
+                  >
+                    <RotateCcw size={14} />
+                    Reset
+                  </button>
+                )}
+                <div className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold ${
+                  round2TimeLeft <= 300
+                    ? "border-red-500/30 bg-red-500/10 text-red-400"
+                    : "border-cyan-500/20 bg-cyan-500/5 text-cyan-300"
+                }`}>
+                  <Clock3 size={16} />
+                  {round2Started ? round2FormattedTime : "30:00"}
+                </div>
               </div>
             </div>
 
@@ -2222,7 +1449,7 @@ int main() {
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-3">
                 <p className="text-xs text-slate-500">Time</p>
-                <p className="mt-1 text-xl font-bold text-white">60 Min</p>
+                <p className="mt-1 text-xl font-bold text-white">30 Min</p>
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-3">
                 <p className="text-xs text-slate-500">Questions</p>
@@ -2459,6 +1686,15 @@ int main() {
                     >
                       <Send size={16} />
                       {round2Submitted ? "Submitted" : "Submit Code"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={resetRound2}
+                      className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:border-emerald-500 hover:text-white"
+                      title="Reset Round 2 code, test results, and timer"
+                    >
+                      <RotateCcw size={16} />
+                      Reset
                     </button>
                   </div>
                 </div>
@@ -2975,15 +2211,34 @@ int main() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
-            <Code2 size={19} className="text-emerald-400" />
-            <div>
-              <p className="text-xs uppercase tracking-wider text-slate-500">
-                Round 2 • Question 1
-              </p>
-              <p className="text-sm font-semibold text-emerald-400">
-                LeetCode Medium
-              </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={resetRound2}
+              className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900/90 px-3.5 py-3 text-xs font-semibold text-slate-300 transition hover:border-emerald-500 hover:text-white"
+              title="Reset Round 2 code, test results, and timer"
+            >
+              <RotateCcw size={14} />
+              Reset Round 2
+            </button>
+            <div className={`flex items-center gap-2 rounded-xl border px-3 py-3 text-sm font-semibold ${
+              round2TimeLeft <= 300
+                ? "border-red-500/30 bg-red-500/10 text-red-400"
+                : "border-cyan-500/20 bg-cyan-500/5 text-cyan-300"
+            }`}>
+              <Clock3 size={16} />
+              {round2FormattedTime}
+            </div>
+            <div className="flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
+              <Code2 size={19} className="text-emerald-400" />
+              <div>
+                <p className="text-xs uppercase tracking-wider text-slate-500">
+                  Round 2 • Question {round2Question}
+                </p>
+                <p className="text-sm font-semibold text-emerald-400">
+                  LeetCode Medium
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -3128,6 +2383,16 @@ int main() {
               >
                 <Send size={17} />
                 {round2Submitted ? "Code Submitted" : "Submit Code"}
+              </button>
+
+              <button
+                type="button"
+                onClick={resetRound2}
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-emerald-500 hover:text-white"
+                title="Reset Round 2 code, test results, and timer"
+              >
+                <RotateCcw size={17} />
+                Reset Round 2
               </button>
             </div>
 

@@ -237,98 +237,75 @@ function Sidebar({
     : "SB";
 
   return (
-    <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-slate-800 bg-slate-950 select-none">
-      {/* ==================================================
-          LOGO & PORTAL BADGE
-      ================================================== */}
-      <div className="flex h-[88px] items-center border-b border-slate-800 px-6">
+    <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-gray-200 bg-white select-none shadow-sm">
+      {/* ── LOGO ── */}
+      <div className="flex h-[72px] items-center border-b border-gray-100 px-5">
         <div className="flex items-center gap-3">
-          <div
-            className={`flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-lg ${currentPortalConfig.logoBg}`}
-          >
-            <LogoIcon size={22} />
-          </div>
-
+          <img src="/logo.png" alt="SkillBridge AI" className="w-11 h-11 object-contain shrink-0" />
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold text-white tracking-tight">SkillBridge</h1>
-            </div>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span
-                className={`text-[10px] font-semibold tracking-wider px-1.5 py-0.5 rounded border ${currentPortalConfig.tagColor}`}
-              >
-                {currentPortalConfig.tag}
-              </span>
-            </div>
+            <h1 className="text-base font-extrabold text-slate-800 tracking-tight leading-tight">SkillBridge</h1>
+            <span className={`text-[10px] font-bold tracking-wider px-1.5 py-0.5 rounded-md border ${currentPortalConfig.tagColor}`}>
+              {currentPortalConfig.tag}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* ==================================================
-          MAIN NAVIGATION
-      ================================================== */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 scrollbar-thin scrollbar-thumb-slate-800">
-        <p className="mb-3 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+      {/* ── MAIN NAV ── */}
+      <div className="flex-1 overflow-y-auto px-3 py-4">
+        <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
           {isStudent ? "Student Workspace" : isIndustry ? "Industry Workspace" : "Institute Workspace"}
         </p>
 
-        <nav className="space-y-1.5">
+        <nav className="space-y-1">
           {mainItems.map((item) => {
             const Icon = item.icon;
             const isActive = activePage === item.id;
-
             return (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => setActivePage(item.id)}
-                className={`flex w-full items-center gap-3.5 rounded-xl px-3.5 py-2.5 text-left transition-all duration-200 ${
+                className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all duration-150 cursor-pointer ${
                   isActive
                     ? currentPortalConfig.activeClass
-                    : "text-slate-400 hover:bg-slate-900/80 hover:text-white"
+                    : "text-slate-500 hover:bg-gray-50 hover:text-slate-800"
                 }`}
               >
-                <Icon size={19} className={isActive ? "text-white" : "text-slate-400"} />
-                <span className="text-sm font-medium">{item.label}</span>
+                <Icon size={18} className={isActive ? "text-white" : "text-slate-400"} />
+                <span className="text-sm font-semibold">{item.label}</span>
               </button>
             );
           })}
         </nav>
 
-        {/* BOTTOM ITEMS */}
+        {/* BOTTOM NAV ITEMS */}
         {bottomItems.length > 0 && (
-          <div className="mt-6 pt-5 border-t border-slate-800/80">
-            <p className="mb-3 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-              Account & Growth
-            </p>
-            <nav className="space-y-1.5">
+          <div className="mt-5 pt-4 border-t border-gray-100">
+            <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Account</p>
+            <nav className="space-y-1">
               {bottomItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activePage === item.id;
-
                 return (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => {
-                      if (
-                        item.id === "student-profile" ||
-                        item.id === "profile" ||
-                        item.id === "institution-profile"
-                      ) {
+                      if (item.id === "student-profile" || item.id === "profile" || item.id === "institution-profile") {
                         setShowProfileModal(true);
                       } else {
                         setActivePage(item.id);
                       }
                     }}
-                    className={`flex w-full items-center gap-3.5 rounded-xl px-3.5 py-2.5 text-left transition-all duration-200 ${
+                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all duration-150 cursor-pointer ${
                       isActive
                         ? currentPortalConfig.activeClass
-                        : "text-slate-400 hover:bg-slate-900/80 hover:text-white"
+                        : "text-slate-500 hover:bg-gray-50 hover:text-slate-800"
                     }`}
                   >
-                    <Icon size={19} className={isActive ? "text-white" : "text-slate-400"} />
-                    <span className="text-sm font-medium">{item.label}</span>
+                    <Icon size={18} className={isActive ? "text-white" : "text-slate-400"} />
+                    <span className="text-sm font-semibold">{item.label}</span>
                   </button>
                 );
               })}
@@ -337,152 +314,80 @@ function Sidebar({
         )}
       </div>
 
-      {/* ==================================================
-          BOTTOM FOOTER: RBAC PORTAL ACCESS
-      ================================================== */}
-      <div className="border-t border-slate-800 bg-slate-950/80 p-3 space-y-2">
+      {/* ── PORTAL SWITCHER ── */}
+      <div className="border-t border-gray-100 bg-gray-50/80 p-3 space-y-2">
         {onSwitchPortal && (
           <div>
-            {/* If Student: Restricted to Student Portal Only */}
             {userRole === "student" ? (
-              <div className="rounded-xl border border-violet-500/20 bg-violet-500/10 px-3 py-2 text-center">
-                <p className="text-[11px] font-semibold text-violet-300 flex items-center justify-center gap-1.5">
-                  <GraduationCap size={13} />
-                  <span>Student Portal</span>
-                </p>
-                <p className="text-[10px] text-slate-400 mt-0.5">
-                  Single Portal Student Mode
+              <div className="rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-center">
+                <p className="text-[11px] font-bold text-violet-600 flex items-center justify-center gap-1.5">
+                  <GraduationCap size={12} /> Student Portal
                 </p>
               </div>
             ) : userRole === "industry" ? (
-              /* If Industry: Can access Student & Industry portals */
               <div>
-                <p className="px-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
-                  <span>Switch Portal</span>
-                  <ArrowLeftRight size={12} className="text-slate-500" />
+                <p className="px-1 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center justify-between">
+                  <span>Switch Portal</span><ArrowLeftRight size={11} />
                 </p>
-                <div className="grid grid-cols-2 gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
-                  <button
-                    type="button"
-                    onClick={() => onSwitchPortal("student")}
-                    title="Student Portal"
-                    className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer ${
-                      selectedPortal === "student"
-                        ? "bg-violet-600 text-white shadow-sm"
-                        : "text-slate-400 hover:text-white hover:bg-slate-800"
-                    }`}
-                  >
-                    <GraduationCap size={13} />
-                    <span>Student</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onSwitchPortal("industry")}
-                    title="Industry Portal"
-                    className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer ${
-                      selectedPortal === "industry"
-                        ? "bg-emerald-600 text-white shadow-sm"
-                        : "text-slate-400 hover:text-white hover:bg-slate-800"
-                    }`}
-                  >
-                    <Factory size={13} />
-                    <span>Industry</span>
-                  </button>
+                <div className="grid grid-cols-2 gap-1 bg-white p-1 rounded-xl border border-gray-200">
+                  {[
+                    { id: "student",  label: "Student",  Icon: GraduationCap, active: "bg-violet-600 text-white" },
+                    { id: "industry", label: "Industry",  Icon: Factory,       active: "bg-emerald-600 text-white" },
+                  ].map((p) => (
+                    <button key={p.id} type="button" onClick={() => onSwitchPortal(p.id)} title={p.label}
+                      className={`py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1.5 transition cursor-pointer ${
+                        selectedPortal === p.id ? p.active : "text-slate-400 hover:text-slate-700 hover:bg-gray-50"}`}>
+                      <p.Icon size={12} />{p.label}
+                    </button>
+                  ))}
                 </div>
               </div>
             ) : (
-              /* If Institution: Can access ALL 3 portals (Student, Industry, Institution) */
               <div>
-                <p className="px-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
-                  <span>Switch Portal</span>
-                  <ArrowLeftRight size={12} className="text-slate-500" />
+                <p className="px-1 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center justify-between">
+                  <span>Switch Portal</span><ArrowLeftRight size={11} />
                 </p>
-                <div className="grid grid-cols-3 gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
-                  <button
-                    type="button"
-                    onClick={() => onSwitchPortal("student")}
-                    title="Student Portal"
-                    className={`py-1.5 px-1 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1 transition cursor-pointer ${
-                      selectedPortal === "student"
-                        ? "bg-violet-600 text-white shadow-sm"
-                        : "text-slate-400 hover:text-white hover:bg-slate-800"
-                    }`}
-                  >
-                    <GraduationCap size={13} />
-                    <span>Student</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onSwitchPortal("industry")}
-                    title="Industry Portal"
-                    className={`py-1.5 px-1 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1 transition cursor-pointer ${
-                      selectedPortal === "industry"
-                        ? "bg-emerald-600 text-white shadow-sm"
-                        : "text-slate-400 hover:text-white hover:bg-slate-800"
-                    }`}
-                  >
-                    <Factory size={13} />
-                    <span>Industry</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onSwitchPortal("institution")}
-                    title="Institute Portal"
-                    className={`py-1.5 px-1 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1 transition cursor-pointer ${
-                      selectedPortal === "institution"
-                        ? "bg-amber-600 text-white shadow-sm"
-                        : "text-slate-400 hover:text-white hover:bg-slate-800"
-                    }`}
-                  >
-                    <Building2 size={13} />
-                    <span>Institute</span>
-                  </button>
+                <div className="grid grid-cols-3 gap-1 bg-white p-1 rounded-xl border border-gray-200">
+                  {[
+                    { id: "student",     label: "Student",   Icon: GraduationCap, active: "bg-violet-600 text-white" },
+                    { id: "industry",    label: "Industry",  Icon: Factory,       active: "bg-emerald-600 text-white" },
+                    { id: "institution", label: "Institute", Icon: Building2,     active: "bg-amber-600 text-white" },
+                  ].map((p) => (
+                    <button key={p.id} type="button" onClick={() => onSwitchPortal(p.id)} title={p.label}
+                      className={`py-1.5 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 transition cursor-pointer ${
+                        selectedPortal === p.id ? p.active : "text-slate-400 hover:text-slate-700 hover:bg-gray-50"}`}>
+                      <p.Icon size={11} />{p.label}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
           </div>
         )}
-
       </div>
 
-      {/* ==================================================
-          LEFT BOTTOM CORNER: USER PROFILE & SETTINGS PILL
-      ================================================== */}
-      <div className="border-t border-slate-800 bg-slate-950 p-2.5">
+      {/* ── USER PROFILE PILL ── */}
+      <div className="border-t border-gray-100 bg-white p-3">
         <button
           type="button"
           onClick={() => setShowProfileModal(true)}
-          className="w-full flex items-center gap-3 p-2 rounded-2xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700/80 transition-all text-left cursor-pointer group shadow-sm"
-          title="Open Profile & Settings"
+          className="w-full flex items-center gap-3 p-2.5 rounded-2xl bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all text-left cursor-pointer group"
         >
-          {/* Avatar with glowing online status dot */}
           <div className="relative shrink-0">
-            <div
-              className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-md transition-transform group-hover:scale-105 ${currentPortalConfig.logoBg}`}
-            >
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-sm ${currentPortalConfig.logoBg}`}>
               {userInitials}
             </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-950" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white" />
           </div>
-
-          {/* Name & Role */}
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-white truncate group-hover:text-violet-300 transition">
-              {displayName}
-            </p>
-            <p className="text-[10px] text-slate-400 truncate mt-0.5">
-              {displaySub}
-            </p>
+            <p className="text-xs font-bold text-slate-700 truncate group-hover:text-indigo-600 transition">{displayName}</p>
+            <p className="text-[10px] text-slate-400 truncate mt-0.5">{displaySub}</p>
           </div>
-
-          {/* Settings Cog Icon */}
-          <div className="text-slate-400 group-hover:text-white transition p-1.5 rounded-lg bg-slate-800/60 group-hover:bg-slate-800 shrink-0">
-            <Settings size={15} />
-          </div>
+          <Settings size={14} className="text-slate-400 group-hover:text-slate-600 transition shrink-0" />
         </button>
       </div>
 
-      {/* POPUP MODAL: PROFILE & SETTINGS */}
+      {/* PROFILE MODAL */}
       <ProfileSettingsModal
         isOpen={showProfileModal}
         onClose={() => setShowProfileModal(false)}
@@ -496,3 +401,4 @@ function Sidebar({
 }
 
 export default Sidebar;
+

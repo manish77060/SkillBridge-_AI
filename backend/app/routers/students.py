@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 
 from app.supabase_client import supabase
+from app.routers.admin import verify_user_token
 
 router = APIRouter(
     prefix="/api/students",
@@ -42,7 +43,7 @@ class StudentUpdate(BaseModel):
 
 
 class StudentSync(BaseModel):
-    id: Optional[str] = "e0bab151-ab49-42fe-b6f1-c4346834b1f1"
+    id: Optional[str] = None
     name: str
     email: str
     college: Optional[str] = None
@@ -114,9 +115,14 @@ def get_students():
 # -----------------------------------------
 
 @router.post("/sync")
-def sync_student(sync_req: StudentSync):
+def sync_student(sync_req: StudentSync, user: Dict[str, Any] = Depends(verify_user_token)):
     try:
-        student_id = sync_req.id or "e0bab151-ab49-42fe-b6f1-c4346834b1f1"
+        if user.get("portal") != "student":
+            raise HTTPException(status_code=403, detail="Only student accounts can sync student profiles")
+
+        student_id = user["sub"]
+        if sync_req.id and sync_req.id != student_id:
+            raise HTTPException(status_code=403, detail="You can only sync your own profile")
         payload: Dict[str, Any] = {
             "name": sync_req.name,
             "full_name": sync_req.name,
