@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, Menu } from "lucide-react";
 
 function Topbar({
   currentUser,
@@ -9,6 +9,7 @@ function Topbar({
   onOpenPostJob,
   activePage,
   setActivePage,
+  onToggleSidebar,
 }) {
   const isIndustry = selectedPortal === "industry";
   const isInstitution = selectedPortal === "institution";
@@ -42,16 +43,26 @@ function Topbar({
   const avatarBg = portalColors[selectedPortal] || portalColors.student;
 
   return (
-    <header className="sticky top-0 z-30 flex h-[72px] items-center justify-between border-b border-gray-200 bg-white px-6 shadow-sm">
+    <header className="sticky top-0 z-30 flex h-[68px] sm:h-[72px] items-center justify-between border-b border-gray-200 bg-white px-3 sm:px-6 shadow-sm">
 
-      {/* LEFT: greeting */}
-      <div className="flex items-center gap-4">
-        <div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-            {isIndustry ? "Industry Workspace" : isInstitution ? "Institution Workspace" : "Student Workspace"}
+      {/* LEFT: hamburger button (mobile only) + greeting */}
+      <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
+        {onToggleSidebar && (
+          <button
+            type="button"
+            onClick={onToggleSidebar}
+            className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-gray-100 transition shrink-0"
+            aria-label="Open sidebar"
+          >
+            <Menu size={20} />
+          </button>
+        )}
+        <div className="min-w-0">
+          <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-slate-400 truncate">
+            {isIndustry ? "Industry" : isInstitution ? "Institution" : "Student"} Workspace
           </p>
-          <h2 className="text-lg font-extrabold text-slate-800 mt-0.5 leading-tight">
-            Welcome back, {userName.split(" ")[0]} 👋
+          <h2 className="text-sm sm:text-lg font-extrabold text-slate-800 leading-tight truncate">
+            Welcome, {userName.split(" ")[0]} 👋
           </h2>
         </div>
       </div>

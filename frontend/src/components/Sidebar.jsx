@@ -16,6 +16,7 @@ import {
   ArrowLeftRight,
   Factory,
   Settings,
+  X,
 } from "lucide-react";
 import ProfileSettingsModal from "./ProfileSettingsModal";
 
@@ -28,6 +29,8 @@ function Sidebar({
   currentUser,
   authPortal,
   onUpdateProfile,
+  mobileOpen = false,
+  onClose,
 }) {
   const [showProfileModal, setShowProfileModal] = useState(false);
   // Resolve user role for RBAC
@@ -237,19 +240,38 @@ function Sidebar({
     : "SB";
 
   return (
-    <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-gray-200 bg-white select-none shadow-sm">
-      {/* ── LOGO ── */}
-      <div className="flex h-[72px] items-center border-b border-gray-100 px-5">
-        <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="SkillBridge AI" className="w-11 h-11 object-contain shrink-0" />
-          <div>
-            <h1 className="text-base font-extrabold text-slate-800 tracking-tight leading-tight">SkillBridge</h1>
-            <span className={`text-[10px] font-bold tracking-wider px-1.5 py-0.5 rounded-md border ${currentPortalConfig.tagColor}`}>
-              {currentPortalConfig.tag}
-            </span>
+    <>
+      {/* Mobile backdrop */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-30 lg:hidden transition-opacity"
+          onClick={onClose}
+        />
+      )}
+
+      <aside className={`fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-gray-200 bg-white select-none shadow-sm transition-transform duration-300 ease-in-out ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
+        {/* ── LOGO ── */}
+        <div className="flex h-[72px] items-center justify-between border-b border-gray-100 px-5">
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="SkillBridge AI" className="w-10 h-10 object-contain shrink-0" />
+            <div>
+              <h1 className="text-base font-extrabold text-slate-800 tracking-tight leading-tight">SkillBridge</h1>
+              <span className={`text-[10px] font-bold tracking-wider px-1.5 py-0.5 rounded-md border ${currentPortalConfig.tagColor}`}>
+                {currentPortalConfig.tag}
+              </span>
+            </div>
           </div>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-gray-100"
+              aria-label="Close sidebar"
+            >
+              <X size={18} />
+            </button>
+          )}
         </div>
-      </div>
 
       {/* ── MAIN NAV ── */}
       <div className="flex-1 overflow-y-auto px-3 py-4">
@@ -396,9 +418,9 @@ function Sidebar({
         onUpdateProfile={onUpdateProfile}
         onLogout={onLogout}
       />
-    </aside>
+      </aside>
+    </>
   );
 }
 
 export default Sidebar;
-

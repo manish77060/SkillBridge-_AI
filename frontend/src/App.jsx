@@ -130,6 +130,7 @@ function App() {
   );
   const [loginStarted, setLoginStarted] = useState(false);
   const [authMode, setAuthMode] = useState("login");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // ── ADMIN STATE ──────────────────────────────────────────
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
@@ -833,35 +834,35 @@ function App() {
         <PublicHeader onLoginClick={() => setPortalStarted(true)} />
 
         {/* ── HERO ── */}
-        <div id="home" className="relative flex flex-col items-center px-6 pt-24 pb-20 text-center overflow-hidden">
+        <div id="home" className="relative flex flex-col items-center px-4 sm:px-6 pt-12 sm:pt-24 pb-14 sm:pb-20 text-center overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-indigo-500/5 blur-[140px] pointer-events-none rounded-full" />
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-violet-500/5 blur-[120px] pointer-events-none rounded-full" />
-          <div className="relative z-10 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-600 text-xs font-semibold uppercase tracking-wider mb-6">
-              <Sparkles className="w-3.5 h-3.5" /><span>AI-Powered Career & Recruitment Platform</span>
+          <div className="relative z-10 max-w-3xl mx-auto w-full">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-4 sm:mb-6 max-w-full">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" /><span className="truncate">AI-Powered Career & Recruitment Platform</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight leading-tight mb-6">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight mb-4 sm:mb-6">
               <span className="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-500 bg-clip-text text-transparent">Bridge the Gap Between<br /></span>
               <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Skills & Careers</span>
             </h1>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-slate-500 text-sm sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-10 px-2">
               SkillBridge AI connects students, institutions and industry through intelligent skill assessment, personalized learning paths and AI-powered job matching.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto">
               <button type="button" onClick={() => setPortalStarted(true)}
-                className="inline-flex items-center gap-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/30 cursor-pointer text-base">
-                <Zap className="w-5 h-5" />Get Started Free<ArrowRight className="w-5 h-5" />
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/30 cursor-pointer text-sm sm:text-base">
+                <Zap className="w-4 h-4 sm:w-5 sm:h-5" />Get Started Free<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <a href="#features"
-                className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-800 font-medium px-6 py-4 rounded-2xl border border-gray-300 hover:border-gray-400 transition-all text-base bg-white hover:bg-gray-50">
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-slate-600 hover:text-slate-800 font-medium px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border border-gray-300 hover:border-gray-400 transition-all text-sm sm:text-base bg-white hover:bg-gray-50">
                 Explore Features
               </a>
             </div>
-            <div className="mt-14 grid grid-cols-3 gap-6 max-w-xl mx-auto">
+            <div className="mt-10 sm:mt-14 grid grid-cols-3 gap-2 sm:gap-6 max-w-xl mx-auto">
               {[{ value: "10K+", label: "Students" }, { value: "500+", label: "Companies" }, { value: "95%", label: "Placement Rate" }].map((s) => (
-                <div key={s.label} className="text-center">
-                  <p className="text-3xl font-extrabold text-slate-800">{s.value}</p>
-                  <p className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{s.label}</p>
+                <div key={s.label} className="text-center p-2.5 sm:p-3 rounded-2xl bg-white/70 sm:bg-transparent border border-gray-200/60 sm:border-0 shadow-xs sm:shadow-none">
+                  <p className="text-xl sm:text-3xl font-extrabold text-slate-800">{s.value}</p>
+                  <p className="text-[10px] sm:text-xs text-slate-400 mt-1 uppercase tracking-wider">{s.label}</p>
                 </div>
               ))}
             </div>
@@ -1397,7 +1398,7 @@ function App() {
 
   if (isLoggedIn && selectedPortal === "industry") {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 flex">
         <Sidebar
           activePage={activeIndustryPage}
           setActivePage={handleIndustryPageChange}
@@ -1407,9 +1408,11 @@ function App() {
           currentUser={currentUser}
           authPortal={currentUser?.authPortal || initialSession?.user?.authPortal || "industry"}
           onUpdateProfile={handleUpdateProfile}
+          mobileOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
         />
 
-        <div className="ml-64 min-h-screen flex flex-col">
+        <div className="lg:ml-64 ml-0 min-h-screen flex flex-col w-full min-w-0">
           <Topbar
             currentUser={currentUser}
             selectedPortal="industry"
@@ -1419,9 +1422,10 @@ function App() {
             onOpenPostJob={() => setShowIndustryPostModal(true)}
             onRefresh={handleIndustryRefresh}
             refreshing={industryRefreshing}
+            onToggleSidebar={() => setSidebarOpen(prev => !prev)}
           />
 
-          <main className="min-h-[calc(100vh-80px)] px-8 py-8">
+          <main className="min-h-[calc(100vh-72px)] px-3 sm:px-6 lg:px-8 py-4 sm:py-8 w-full min-w-0 overflow-x-hidden">
             <Industry
               embedded={true}
               activeIndustryPage={activeIndustryPage}
@@ -1445,7 +1449,7 @@ function App() {
 
   if (isLoggedIn && selectedPortal === "institution") {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 flex">
         <Sidebar
           activePage={activeInstitutionPage}
           setActivePage={handleInstitutionPageChange}
@@ -1455,18 +1459,21 @@ function App() {
           currentUser={currentUser}
           authPortal={currentUser?.authPortal || initialSession?.user?.authPortal || "institution"}
           onUpdateProfile={handleUpdateProfile}
+          mobileOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
         />
 
-        <div className="ml-64 min-h-screen flex flex-col">
+        <div className="lg:ml-64 ml-0 min-h-screen flex flex-col w-full min-w-0">
           <Topbar
             currentUser={currentUser}
             selectedPortal="institution"
             activePage={activeInstitutionPage}
             setActivePage={handleInstitutionPageChange}
             onLogout={handleLogout}
+            onToggleSidebar={() => setSidebarOpen(prev => !prev)}
           />
 
-          <main className="min-h-[calc(100vh-80px)] px-8 py-8">
+          <main className="min-h-[calc(100vh-72px)] px-3 sm:px-6 lg:px-8 py-4 sm:py-8 w-full min-w-0 overflow-x-hidden">
             <Institution
               activePage={activeInstitutionPage}
               setActivePage={handleInstitutionPageChange}
@@ -1485,7 +1492,7 @@ function App() {
   // ==========================================================
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex">
       <Sidebar
         activePage={activeStudentPage}
         setActivePage={setActivePage}
@@ -1495,9 +1502,11 @@ function App() {
         currentUser={currentUser}
         authPortal={currentUser?.authPortal || initialSession?.user?.authPortal || "student"}
         onUpdateProfile={handleUpdateProfile}
+        mobileOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
 
-      <div className="ml-64 min-h-screen flex flex-col">
+      <div className="lg:ml-64 ml-0 min-h-screen flex flex-col w-full min-w-0">
         <Topbar
           currentUser={currentUser}
           selectedPortal="student"
@@ -1505,9 +1514,10 @@ function App() {
           setActivePage={setActivePage}
           onLogout={handleLogout}
           onRefresh={() => {}}
+          onToggleSidebar={() => setSidebarOpen(prev => !prev)}
         />
 
-        <main className="min-h-[calc(100vh-80px)] px-8 py-8">
+        <main className="min-h-[calc(100vh-72px)] px-3 sm:px-6 lg:px-8 py-4 sm:py-8 w-full min-w-0 overflow-x-hidden">
           {activeStudentPage === "dashboard" && (
             <Dashboard currentUser={currentUser} setActivePage={setActivePage} />
           )}
