@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
   User,
@@ -337,8 +338,8 @@ export default function ProfileSettingsModal({
         .slice(0, 2)
     : "SB";
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm animate-fadeIn">
       {/* Click outside backdrop */}
       <div
         className="fixed inset-0 -z-10"
@@ -1203,6 +1204,7 @@ export default function ProfileSettingsModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

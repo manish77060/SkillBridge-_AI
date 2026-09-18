@@ -408,8 +408,9 @@ function Sidebar({
           <Settings size={14} className="text-slate-400 group-hover:text-slate-600 transition shrink-0" />
         </button>
       </div>
+      </aside>
 
-      {/* PROFILE MODAL */}
+      {/* PROFILE MODAL (Placed outside transformed aside to prevent clipping/containment) */}
       <ProfileSettingsModal
         isOpen={showProfileModal}
         onClose={() => setShowProfileModal(false)}
@@ -418,7 +419,6 @@ function Sidebar({
         onUpdateProfile={onUpdateProfile}
         onLogout={onLogout}
       />
-      </aside>
     </>
   );
 }
