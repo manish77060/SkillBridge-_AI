@@ -36,6 +36,8 @@ import {
   EyeOff,
   Brain,
   Target,
+  Menu,
+  X,
 } from "lucide-react";
 
 
@@ -735,41 +737,91 @@ function App() {
 
 
   // Shared header component (contact bar + navbar) used on both public screens
-  const PublicHeader = ({ onLoginClick }) => (
-    <>
-      <div className="public-contact-bar w-full bg-gradient-to-r from-indigo-700 via-violet-700 to-indigo-700 text-white text-sm shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-10">
-          <a href="tel:01204806824" className="flex items-center gap-2 hover:text-white/80 transition-colors">
-            <Phone className="w-3.5 h-3.5 shrink-0" />
-            <span className="text-xs sm:text-sm font-medium">Call us : 0120-4806824</span>
-          </a>
-          <a href="mailto:support@skillbridge.ai" className="flex items-center gap-2 hover:text-white/80 transition-colors">
-            <Mail className="w-3.5 h-3.5 shrink-0" />
-            <span className="text-xs sm:text-sm font-medium">E-mail : support@skillbridge.ai</span>
-          </a>
-        </div>
-      </div>
-      <nav className="w-full border-b border-gray-200 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="SkillBridge AI" className="w-12 h-12 object-contain" />
-            <span className="text-xl font-extrabold tracking-tight text-slate-800">
-              SkillBridge <span className="text-indigo-600">AI</span>
-            </span>
-          </div>
-          <div className="flex items-center gap-1 sm:gap-2">
-            <a href="#home" className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-all">Home</a>
-            <a href="#features" className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-all">Features</a>
-            <a href="#about" className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-all">About Us</a>
-            <button type="button" onClick={onLoginClick}
-              className="ml-2 px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-all shadow-md shadow-indigo-600/25 cursor-pointer">
-              Login
-            </button>
+  const PublicHeader = ({ onLoginClick }) => {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    return (
+      <>
+        <div className="public-contact-bar w-full bg-gradient-to-r from-indigo-700 via-violet-700 to-indigo-700 text-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-10 text-center">
+            <a href="tel:01204806824" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
+              <Phone className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-[11px] sm:text-sm font-medium">Call us : 0120-4806824</span>
+            </a>
+            <a href="mailto:support@skillbridge.ai" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
+              <Mail className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-[11px] sm:text-sm font-medium">E-mail : support@skillbridge.ai</span>
+            </a>
           </div>
         </div>
-      </nav>
-    </>
-  );
+        <nav className="w-full border-b border-gray-200 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center gap-2">
+              <img src="/logo.png" alt="SkillBridge AI" className="w-9 h-9 sm:w-11 sm:h-11 object-contain shrink-0" />
+              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-800 whitespace-nowrap">
+                SkillBridge <span className="text-indigo-600">AI</span>
+              </span>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1 sm:gap-2">
+              <a href="#home" className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-all">Home</a>
+              <a href="#features" className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-all">Features</a>
+              <a href="#about" className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-all">About Us</a>
+              <button type="button" onClick={onLoginClick}
+                className="ml-2 px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-all shadow-md shadow-indigo-600/25 cursor-pointer">
+                Login
+              </button>
+            </div>
+
+            {/* Mobile Actions: Login + Hamburger Toggle */}
+            <div className="flex md:hidden items-center gap-2">
+              <button type="button" onClick={onLoginClick}
+                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-all">
+                Login
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-all focus:outline-none"
+                aria-label="Toggle navigation menu"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Dropdown Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-gray-100 bg-white px-4 py-2 space-y-1 shadow-md">
+              <a
+                href="#home"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 text-sm font-medium text-slate-700 hover:bg-gray-50 rounded-lg"
+              >
+                Home
+              </a>
+              <a
+                href="#features"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 text-sm font-medium text-slate-700 hover:bg-gray-50 rounded-lg"
+              >
+                Features
+              </a>
+              <a
+                href="#about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 text-sm font-medium text-slate-700 hover:bg-gray-50 rounded-lg"
+              >
+                About Us
+              </a>
+            </div>
+          )}
+        </nav>
+      </>
+    );
+  };
 
   // ==========================================================
   // SCREEN A: PUBLIC LANDING PAGE (no portal cards)
