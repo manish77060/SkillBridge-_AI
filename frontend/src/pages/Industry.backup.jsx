@@ -28,8 +28,7 @@ import {
   BarChart3,
   RefreshCw,
 } from "lucide-react";
-
-const API_BASE = "http://127.0.0.1:8000/api";
+import { API_URL as API_BASE } from "../config/api";
 
 const DEMO_STUDENT_ID =
   "e0bab151-ab49-42fe-b6f1-c4346834b1f1";

@@ -30,6 +30,7 @@ import {
   FileText,
   SlidersHorizontal,
 } from "lucide-react";
+import { API_URL } from "../config/api";
 
 export default function ProfileSettingsModal({
   isOpen,
@@ -220,7 +221,7 @@ export default function ProfileSettingsModal({
             })
           );
 
-          await fetch("http://127.0.0.1:8000/api/students/sync", {
+          await fetch(`${API_URL}/students/sync`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

@@ -40,8 +40,7 @@ import {
   Send,
   Info,
 } from "lucide-react";
-
-const API_BASE_URL = "http://127.0.0.1:8000";
+import { API_BASE_URL, DOCS_URL } from "../config/api";
 const STUDENT_ID = "e0bab151-ab49-42fe-b6f1-c4346834b1f1";
 
 function StudentProfile({
@@ -1408,7 +1407,7 @@ function StudentProfile({
                 {/* QUICK LINKS & DEVELOPER DOCS */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <a
-                    href="http://localhost:8000/docs"
+                    href={DOCS_URL}
                     target="_blank"
                     rel="noreferrer"
                     className="p-4 rounded-2xl border border-slate-800 bg-slate-900/60 hover:bg-slate-900 flex items-center justify-between text-xs text-slate-200 transition group"

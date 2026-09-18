@@ -16,6 +16,7 @@ import StudentProfile from "./pages/StudentProfile";
 
 import Industry from "./pages/Industry";
 import Institution from "./pages/Institution";
+import { API_URL } from "./config/api";
 
 import {
   GraduationCap,
@@ -73,8 +74,7 @@ const PORTALS = {
 };
 
 
-// The API URL is configurable in production through VITE_API_URL.
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
+// API_URL is imported from ./config/api for development and production support.
 
 
 // ============================================================

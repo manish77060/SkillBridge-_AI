@@ -12,8 +12,7 @@ import {
   AlertTriangle,
   Building2,
 } from "lucide-react";
-
-const API_BASE = "http://127.0.0.1:8000";
+import { API_BASE_URL as API_BASE } from "../config/api";
 const STUDENT_ID = "e0bab151-ab49-42fe-b6f1-c4346834b1f1";
 
 function getEffectiveStudentId(currentUser) {

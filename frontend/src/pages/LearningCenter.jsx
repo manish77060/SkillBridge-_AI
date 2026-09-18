@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
-// Keep this ID consistent with the existing project until authentication supplies it.
-const API_BASE = "http://127.0.0.1:8000";
+import { API_BASE_URL as API_BASE } from "../config/api";
 export const LEARNING_STUDENT_ID = "e0bab151-ab49-42fe-b6f1-c4346834b1f1";
 const COURSE_TITLE = "SkillBridge Developer Foundations";
 const CERTIFICATE_MIN_PERCENT = 60; // Learners need 60% or higher for certificate eligibility.

@@ -5,8 +5,7 @@ import {
   Building2, ChevronDown, AlertCircle, Eye, KeyRound,
   ArrowLeft, RefreshCw
 } from "lucide-react";
-
-const API = "http://127.0.0.1:8000/api";
+import { API_URL as API } from "../config/api";
 
 // ─────────────────────────────────────────────────────────────
 // ADMIN LOGIN SCREEN

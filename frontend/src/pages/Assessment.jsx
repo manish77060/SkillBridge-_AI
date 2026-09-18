@@ -19,8 +19,7 @@ import {
   Send,
   Terminal,
 } from "lucide-react";
-
-const API_BASE_URL = "http://127.0.0.1:8000";
+import { API_BASE_URL } from "../config/api";
 
 const STUDENT_ID = "e0bab151-ab49-42fe-b6f1-c4346834b1f1";
 

@@ -18,6 +18,7 @@ import {
   ChevronRight,
   RefreshCw,
 } from "lucide-react";
+import { API_URL } from "../config/api";
 
 function Skills({ currentUser }) {
   // Resolve user info dynamically
@@ -182,7 +183,7 @@ function Skills({ currentUser }) {
       formData.append("file", file);
 
       const response = await fetch(
-        "http://127.0.0.1:8000/api/resume/analyze",
+        `${API_URL}/resume/analyze`,
         {
           method: "POST",
           body: formData,
