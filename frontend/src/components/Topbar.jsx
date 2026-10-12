@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Bell, Menu } from "lucide-react";
+import { Search, Bell, Menu, Sparkles } from "lucide-react";
 
 function Topbar({
   currentUser,
@@ -86,6 +86,18 @@ function Topbar({
             className="h-9 px-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 flex items-center gap-2 text-xs font-semibold text-slate-600 transition cursor-pointer shadow-sm">
             <span className={`text-sm ${refreshing ? "animate-spin inline-block" : ""}`}>🔄</span>
             <span className="hidden md:inline">Refresh</span>
+          </button>
+        )}
+
+        {/* Billing & Plans Shortcut for Industry / Institution */}
+        {(isIndustry || isInstitution) && setActivePage && (
+          <button
+            type="button"
+            onClick={() => setActivePage("subscription")}
+            className="h-9 px-3 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 flex items-center gap-1.5 text-xs font-bold text-indigo-700 transition cursor-pointer shadow-sm"
+          >
+            <Sparkles size={14} className="text-indigo-600" />
+            <span className="hidden sm:inline">Billing & Plans</span>
           </button>
         )}
 

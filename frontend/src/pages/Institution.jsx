@@ -32,6 +32,7 @@ import {
   Zap,
 } from "lucide-react";
 import { API_BASE_URL } from "../config/api";
+import Subscription from "./Billing/Subscription";
 
 const FALLBACK_INSTITUTION_DATA = {
   status: "success",
@@ -423,6 +424,15 @@ function Institution({
           </div>
         </div>
       </div>
+    );
+  }
+
+  if (activePage === "subscription") {
+    return (
+      <Subscription
+        portalType="institution"
+        onBack={() => (setActivePage ? setActivePage("dashboard") : null)}
+      />
     );
   }
 

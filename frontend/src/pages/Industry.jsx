@@ -29,6 +29,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { API_URL as API_BASE } from "../config/api";
+import Subscription from "./Billing/Subscription";
 
 const DEMO_STUDENT_ID =
   "e0bab151-ab49-42fe-b6f1-c4346834b1f1";
@@ -1315,6 +1316,15 @@ export default function Industry({ activeIndustryPage = "dashboard", setActiveIn
         jobs={jobs}
         candidates={candidates}
         loadingAnalytics={loadingAnalytics}
+      />
+    );
+  }
+
+  if (activeIndustryPage === "subscription") {
+    return (
+      <Subscription
+        portalType="industry"
+        onBack={() => setActiveIndustryPage("dashboard")}
       />
     );
   }

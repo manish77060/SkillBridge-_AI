@@ -169,6 +169,7 @@ function App() {
       "analytics",
       "profile",
       "settings",
+      "subscription",
     ];
 
     return allowedPages.includes(page) ? page : null;
@@ -298,6 +299,7 @@ function App() {
       "analytics",
       "profile",
       "settings",
+      "subscription",
     ];
 
     const nextPage = allowedPages.includes(page) ? page : "dashboard";
@@ -311,6 +313,7 @@ function App() {
       analytics: "/industry/analytics",
       profile: "/industry/profile",
       settings: "/industry/settings",
+      subscription: "/industry/subscription",
     };
 
     const newPath = pathMap[nextPage] || "/industry/dashboard";

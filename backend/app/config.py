@@ -27,3 +27,17 @@ supabase = create_client(
     SUPABASE_URL,
     SUPABASE_SECRET_KEY
 )
+
+# Razorpay credentials for Industry & Institution Billing
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "rzp_test_placeholder")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "test_secret_placeholder")
+RAZORPAY_WEBHOOK_SECRET = os.getenv("RAZORPAY_WEBHOOK_SECRET", "webhook_secret_placeholder")
+
+class Settings:
+    SUPABASE_URL: str = SUPABASE_URL
+    SUPABASE_SECRET_KEY: str = SUPABASE_SECRET_KEY
+    RAZORPAY_KEY_ID: str = RAZORPAY_KEY_ID
+    RAZORPAY_KEY_SECRET: str = RAZORPAY_KEY_SECRET
+    RAZORPAY_WEBHOOK_SECRET: str = RAZORPAY_WEBHOOK_SECRET
+
+settings = Settings()

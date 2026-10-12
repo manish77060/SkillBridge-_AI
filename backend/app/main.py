@@ -20,6 +20,8 @@ from app.routers import skill_gap
 from app.routers import opportunity_matching
 from app.routers import resume
 from app.routers import admin          # Super Admin & User Auth
+from app.routers import subscriptions  # Razorpay Plans & Subscriptions
+from app.routers import payments       # Razorpay Payments & Webhooks
 
 
 # =========================================================
@@ -215,6 +217,18 @@ app.include_router(
 
 app.include_router(
     admin.router
+)
+
+# ---------------------------------------------------------
+# BILLING & RAZORPAY SUBSCRIPTION APIs
+# ---------------------------------------------------------
+
+app.include_router(
+    subscriptions.router
+)
+
+app.include_router(
+    payments.router
 )
 
 

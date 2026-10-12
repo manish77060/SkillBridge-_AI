@@ -16,6 +16,7 @@ import {
   ArrowLeftRight,
   Factory,
   Settings,
+  CreditCard,
   X,
 } from "lucide-react";
 import ProfileSettingsModal from "./ProfileSettingsModal";
@@ -123,6 +124,11 @@ function Sidebar({
       label: "Analytics",
       icon: BarChart3,
     },
+    {
+      id: "subscription",
+      label: "Billing & Plans",
+      icon: CreditCard,
+    },
   ];
 
   const industryBottomItems = [
@@ -148,6 +154,11 @@ function Sidebar({
       id: "analytics",
       label: "Placement Analytics",
       icon: BarChart3,
+    },
+    {
+      id: "subscription",
+      label: "Billing & Plans",
+      icon: CreditCard,
     },
   ];
 
